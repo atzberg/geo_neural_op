@@ -27,7 +27,7 @@ __Quick Start__
 
 
 ```bash
-git clone git@github.com:atzberg/geo_neural_op__staging.git
+git clone git@github.com:atzberg/geo_neural_op.git
 conda create -n gnp
 conda activate gnp
 pip install -r requirements.txt
