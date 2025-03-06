@@ -2,7 +2,7 @@
 <img src="https://github.com/atzberg/geo_neural_op__staging/blob/main/images/docs/geo_neural_op_software.png" width="90%"> 
 </p>
 
-[Documentation](https://github.com/atzberg/geo_neural_op__staging/tree/main/examples) |
+[Documentation](https://web.math.ucsb.edu/~atzberg/geo_neural_op_docs/html/index.html) |
 [Examples](./examples) |
 [Paper](https://doi.org/10.1088/2632-2153/ad8980) |
 [ArXiv](https://arxiv.org/abs/2404.10843)
@@ -32,11 +32,14 @@ conda create -n gnp
 conda activate gnp
 pip install -r requirements.txt
 ```
-
+You may also need to first install `pip`,
+```bash
+conda insall pip 
+```
 
 For use of the package see the [examples folder](https://github.com/atzberg/geo_neural_op__staging/tree/main/examples).  More
 information on the structure of the package also can be found on the
-[documentation pages](https://github.com/gd-vae/gd-vae/tree/master/docs).
+[documentation pages](https://web.math.ucsb.edu/~atzberg/geo_neural_op_docs/html/index.html).
 
 __Packages__ 
 
@@ -52,7 +55,7 @@ For information on how to use the package, see
 
 - [Examples](./examples) |
 
-- [Documentation](https://github.com/atzberg/geo_neural_op__staging/tree/main/examples) |
+- [Documentation](https://web.math.ucsb.edu/~atzberg/geo_neural_op_docs/html/index.html) |
 
 __Additional Information__
 
