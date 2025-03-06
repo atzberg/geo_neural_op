@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gnp.geometry.surface &mdash; Geometric Neural Operator 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=0ea5f55c"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Geometric Neural Operator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../gnp.estimator.html">estimator.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gnp.models.html">gnp.models module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gnp.geometry.html">gnp.geometry module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gnp.dataset.html">gnp.dataset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gnp.utils.html">utils.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gnp.config.html">config.py</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Geometric Neural Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gnp.geometry.surface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for gnp.geometry.surface</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch_geometric.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Batch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.legendre</span><span class="w"> </span><span class="kn">import</span> <span class="n">Legendre2D</span>
+
+<div class="viewcode-block" id="SurfacePatch">
+<a class="viewcode-back" href="../../../gnp.geometry.html#gnp.geometry.surface.SurfacePatch">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SurfacePatch</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Surface Patch for computing geometric quantities from Legendre Coefficients</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch_data</span><span class="p">:</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">surface_coefficients</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        patch_data : Data</span>
+<span class="sd">            Patch data in local PCA coordinates.</span>
+<span class="sd">        surface_coefficients : torch.Tensor</span>
+<span class="sd">            Legendre coefficients representing the surface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patch</span> <span class="o">=</span> <span class="n">patch_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">patch_data</span><span class="o">.</span><span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">patch_data</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch</span> <span class="o">=</span> <span class="n">patch_data</span><span class="o">.</span><span class="n">batch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">patch_data</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cluster_mask</span> <span class="o">=</span> <span class="n">patch_data</span><span class="o">.</span><span class="n">cluster_mask</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="n">surface_coefficients</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basis</span> <span class="o">=</span> <span class="n">Legendre2D</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">centers</span> <span class="o">=</span> <span class="n">patch_data</span><span class="o">.</span><span class="n">center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xy_scale</span> <span class="o">=</span> <span class="n">patch_data</span><span class="o">.</span><span class="n">xy_scale</span><span class="p">[</span><span class="n">patch_data</span><span class="o">.</span><span class="n">batch</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_scale</span> <span class="o">=</span> <span class="n">patch_data</span><span class="o">.</span><span class="n">z_scale</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pca_vectors</span> <span class="o">=</span> <span class="n">patch_data</span><span class="o">.</span><span class="n">pca_vectors</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">derivative_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">reciprocal</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">xy_scale</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> 
+                       <span class="bp">self</span><span class="o">.</span><span class="n">xy_scale</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="p">)</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">evaluate_from_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> 
+                                                 <span class="bp">self</span><span class="o">.</span><span class="n">z_scale</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">,</span> 
+                                                 <span class="bp">self</span><span class="o">.</span><span class="n">batch</span><span class="p">)</span>
+        <span class="n">h_derivatives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">derivatives_from_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> 
+                                                           <span class="bp">self</span><span class="o">.</span><span class="n">z_scale</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">,</span> 
+                                                           <span class="bp">self</span><span class="o">.</span><span class="n">batch</span><span class="p">)</span>
+        <span class="n">h_derivatives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivative_scale</span> <span class="o">*</span> <span class="n">h_derivatives</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_vv</span><span class="p">)</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">h_derivatives</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">local_coordinate_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the local PCA basis coordinates at each point</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            local coordinates of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pca_vectors</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">batch</span><span class="p">]</span>
+        
+    <span class="nd">@cached_property</span>    
+    <span class="k">def</span><span class="w"> </span><span class="nf">xyz_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the xyz coordinates of the surface patches</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            xyz coordinates of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">pca_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">pca_basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_coordinate_basis</span>
+        <span class="n">xyz</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">centers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">batch</span><span class="p">]</span>
+               <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy_scale</span> <span class="o">*</span> <span class="p">(</span><span class="n">pca_x</span> <span class="o">*</span> <span class="n">pca_basis</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+               <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">*</span> <span class="n">pca_basis</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">xyz</span>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pca_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the PCA coordinates of the surface patches</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            PCA coordinates of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pca_coord</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_scale</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">batch</span><span class="p">]),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">pca_coord</span>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tangents_pca</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the tangents of the surface patches in local coordinates</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            tangents of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">ones</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">zeros</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">tangent_u</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">ones</span><span class="p">,</span>
+                              <span class="n">zeros</span><span class="p">,</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">tangent_v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">zeros</span><span class="p">,</span>
+                              <span class="n">ones</span><span class="p">,</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">tangent_u</span><span class="p">,</span> <span class="n">tangent_v</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tangents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the tangents of the surface patches in global coordinates</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            tangents of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">pca_basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_coordinate_basis</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tangents_pca</span> <span class="o">@</span> <span class="n">pca_basis</span>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">normals_pca</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the normals of the surface patches in local coordinates</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            normals of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">ones</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">normals</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span><span class="p">,</span>
+                            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="p">,</span>
+                            <span class="n">ones</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">normals</span> <span class="o">=</span> <span class="n">normals</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">normals</span>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">normals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the normals of the surface patches in global coordinates</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            normals of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">pca_basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_coordinate_basis</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normals_pca</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">@</span> <span class="n">pca_basis</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">metric</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the metric tensor of the surface patches</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            metric tensor of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">E</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">F</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">E</span><span class="p">,</span> <span class="n">F</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                            <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">F</span><span class="p">,</span> <span class="n">G</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+    <span class="nd">@cached_property</span>    
+    <span class="k">def</span><span class="w"> </span><span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the shape tensor of the surface patches</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            shape tensor of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">divisor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uu</span> <span class="o">/</span> <span class="n">divisor</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span> <span class="o">/</span> <span class="n">divisor</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_vv</span> <span class="o">/</span> <span class="n">divisor</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">L</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                            <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">weingarten</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the Weingarten tensor of the surface patches</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            Weingarten tensor of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+    
+    <span class="nd">@cached_property</span>    
+    <span class="k">def</span><span class="w"> </span><span class="nf">gaussian_curvature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the Gaussian curvature tensor of the surface patches</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            Gaussian curvature tensor of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weingarten</span><span class="p">)</span>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mean_curvature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the mean curvature tensor of the surface patches</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            mean curvature tensor of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weingarten</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">dim1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dim2</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inverse_metric</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the inverse metric tensor of the surface patches</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            inverse metric tensor of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inverse_metric_derivatives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the derivatives of the inverse metric tensor of the surface patches</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            derivatives of the inverse metric tensor of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">zero</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_u</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        
+        <span class="n">mat1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+            <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> 
+             <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="p">,</span> 
+             <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="p">,</span> 
+             <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        
+        <span class="n">mat2_u</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">zero</span><span class="p">,</span> 
+             <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">h_uu</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span> <span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span><span class="p">,</span>
+             <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">h_uu</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span><span class="p">,</span>
+             <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uu</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">mat2_v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+            <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_vv</span><span class="p">,</span> 
+             <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">h_vv</span><span class="p">,</span>
+             <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_vv</span><span class="p">,</span>
+             <span class="n">zero</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">divisor</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="n">det_u</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uu</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span><span class="p">)</span> 
+                 <span class="o">/</span> <span class="n">divisor</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">det_v</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_vv</span><span class="p">)</span> 
+                 <span class="o">/</span> <span class="n">divisor</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="n">ginv_u</span> <span class="o">=</span> <span class="n">det_u</span> <span class="o">*</span> <span class="n">mat1</span> <span class="o">+</span> <span class="n">mat2_u</span> <span class="o">/</span> <span class="n">divisor</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">ginv_v</span> <span class="o">=</span> <span class="n">det_v</span> <span class="o">*</span> <span class="n">mat1</span> <span class="o">+</span> <span class="n">mat2_v</span> <span class="o">/</span> <span class="n">divisor</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">ginv_u</span><span class="p">,</span> <span class="n">ginv_v</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">det_metric</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the determinant of the metric tensor of the surface patches</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            determinant of the metric tensor of the surface patches</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">laplace_beltrami_first_terms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the first terms of the Laplace-Beltrami operator. These terms </span>
+<span class="sd">        are multiplied to the second derivatives of the function.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            torch.Tensor: The first terms of the laplace-beltrami operator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>    
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_metric</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse_metric</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">laplace_beltrami_second_terms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the second terms of the Laplace-Beltrami operator. These terms </span>
+<span class="sd">        are multiplied to the first derivatives of the function.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            torch.Tensor: The second terms of the laplace-beltrami operator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        
+        <span class="n">det_g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_metric</span>
+        <span class="n">uu</span> <span class="o">=</span> <span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span> <span class="o">/</span> <span class="n">det_g</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span> 
+              <span class="o">-</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uu</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> 
+                 <span class="o">/</span> <span class="n">det_g</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)))</span>
+        <span class="n">uv</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">h_uu</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span><span class="p">)</span> <span class="o">/</span> <span class="n">det_g</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span> 
+              <span class="o">+</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uu</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="p">)</span> 
+                 <span class="o">/</span> <span class="n">det_g</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)))</span>
+        <span class="n">vu</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_vv</span><span class="p">)</span> <span class="o">/</span> <span class="n">det_g</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span> 
+              <span class="o">+</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_vv</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span><span class="p">)</span> 
+                 <span class="o">/</span> <span class="n">det_g</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)))</span>
+        <span class="n">vv</span> <span class="o">=</span> <span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span> <span class="o">/</span> <span class="n">det_g</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span> 
+              <span class="o">-</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">h_u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_uv</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_v</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_vv</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_u</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> 
+                 <span class="o">/</span> <span class="n">det_g</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">uu</span><span class="p">,</span> <span class="n">uv</span><span class="p">,</span> <span class="n">vu</span><span class="p">,</span> <span class="n">vv</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">laplace_beltrami_legendre_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the Laplace-Beltrami operator on each of the Legendre basis </span>
+<span class="sd">        functions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            torch.Tensor: (n, 16) tensor containing the Laplace-Beltrami</span>
+<span class="sd">            operator applied to the Legendre basis functions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        
+        <span class="n">derivatives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivative_scale</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">evaluate_derivatives</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+        <span class="n">fu</span><span class="p">,</span> <span class="n">fv</span><span class="p">,</span> <span class="n">fuv</span><span class="p">,</span> <span class="n">fuu</span><span class="p">,</span> <span class="n">fvv</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="n">derivatives</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                
+        <span class="n">lb_first</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">laplace_beltrami_first_terms</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">lb_second</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">laplace_beltrami_second_terms</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">legendre_lb</span> <span class="o">=</span> <span class="p">(</span><span class="n">lb_first</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">fuu</span><span class="p">,</span> <span class="n">fuv</span><span class="p">,</span> <span class="n">fuv</span><span class="p">,</span> <span class="n">fvv</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> 
+                       <span class="o">+</span> <span class="n">lb_second</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">fu</span><span class="p">,</span> <span class="n">fv</span><span class="p">,</span> <span class="n">fu</span><span class="p">,</span> <span class="n">fv</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">legendre_lb</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_metric</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+    
+<div class="viewcode-block" id="SurfacePatch.laplace_beltrami_from_coefficients">
+<a class="viewcode-back" href="../../../gnp.geometry.html#gnp.geometry.surface.SurfacePatch.laplace_beltrami_from_coefficients">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">laplace_beltrami_from_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                                           <span class="n">function_coefficients</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+                                           <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the Laplace-Beltrami operator from the surface coefficients </span>
+<span class="sd">        and the function coefficients.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        function_coefficients : torch.Tensor</span>
+<span class="sd">            Legendre coefficients representing the function.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.Tensor</span>
+<span class="sd">            Laplace-Beltrami operator applied to the function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">lb_values</span> <span class="o">=</span> <span class="p">(</span><span class="n">function_coefficients</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">batch</span><span class="p">]</span> 
+                     <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">laplace_beltrami_legendre_basis</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lb_values</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Blaine Quackenbush, Paul J. Atzberger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

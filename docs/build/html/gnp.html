@@ -1,0 +1,531 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gnp package &mdash; Geometric Neural Operator 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=0ea5f55c"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Geometric Neural Operator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gnp.estimator.html">estimator.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnp.models.html">gnp.models module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnp.geometry.html">gnp.geometry module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnp.dataset.html">gnp.dataset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnp.utils.html">utils.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnp.config.html">config.py</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Geometric Neural Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">gnp package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/gnp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gnp-package">
+<h1>gnp package<a class="headerlink" href="#gnp-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gnp.dataset.html">gnp.dataset module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gnp.dataset.html#module-gnp.dataset.patch">gnp.dataset.patch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gnp.dataset.html#gnp.dataset.patch.PatchGenerator"><code class="docutils literal notranslate"><span class="pre">PatchGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gnp.dataset.html#gnp.dataset.patch.PatchGenerator.get_centers"><code class="docutils literal notranslate"><span class="pre">PatchGenerator.get_centers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.dataset.html#gnp.dataset.patch.PatchGenerator.get_patch"><code class="docutils literal notranslate"><span class="pre">PatchGenerator.get_patch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.dataset.html#gnp.dataset.patch.PatchGenerator.get_patch_indices"><code class="docutils literal notranslate"><span class="pre">PatchGenerator.get_patch_indices()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gnp.dataset.html#gnp.dataset.patch.PatchLoader"><code class="docutils literal notranslate"><span class="pre">PatchLoader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="gnp.dataset.html#gnp.dataset.patch.graph_from_dict"><code class="docutils literal notranslate"><span class="pre">graph_from_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gnp.dataset.html#module-gnp.dataset.pca">gnp.dataset.pca</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gnp.dataset.html#gnp.dataset.pca.PCABatch"><code class="docutils literal notranslate"><span class="pre">PCABatch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gnp.dataset.html#gnp.dataset.pca.PCABatch.to_pca"><code class="docutils literal notranslate"><span class="pre">PCABatch.to_pca()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gnp.dataset.html#gnp.dataset.pca.PCAPatch"><code class="docutils literal notranslate"><span class="pre">PCAPatch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gnp.dataset.html#gnp.dataset.pca.PCAPatch.initialize"><code class="docutils literal notranslate"><span class="pre">PCAPatch.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.dataset.html#gnp.dataset.pca.PCAPatch.to_pca"><code class="docutils literal notranslate"><span class="pre">PCAPatch.to_pca()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gnp.dataset.html#module-gnp.dataset">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gnp.geometry.html">gnp.geometry module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gnp.geometry.html#module-gnp.geometry.surface">gnp.geometry.surface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch"><code class="docutils literal notranslate"><span class="pre">SurfacePatch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.det_metric"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.det_metric</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.gaussian_curvature"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.gaussian_curvature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.inverse_metric"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.inverse_metric</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.inverse_metric_derivatives"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.inverse_metric_derivatives</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.laplace_beltrami_first_terms"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.laplace_beltrami_first_terms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.laplace_beltrami_from_coefficients"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.laplace_beltrami_from_coefficients()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.laplace_beltrami_legendre_basis"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.laplace_beltrami_legendre_basis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.laplace_beltrami_second_terms"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.laplace_beltrami_second_terms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.local_coordinate_basis"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.local_coordinate_basis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.mean_curvature"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.mean_curvature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.metric"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.metric</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.normals"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.normals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.normals_pca"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.normals_pca</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.pca_coordinates"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.pca_coordinates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.shape"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.shape</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.tangents"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.tangents</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.tangents_pca"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.tangents_pca</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.weingarten"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.weingarten</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch.xyz_coordinates"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.xyz_coordinates</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gnp.geometry.html#module-gnp.geometry.legendre">gnp.geometry.legendre</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.legendre.Legendre1D"><code class="docutils literal notranslate"><span class="pre">Legendre1D</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.legendre.Legendre1D.evaluate"><code class="docutils literal notranslate"><span class="pre">Legendre1D.evaluate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.legendre.Legendre1D.first_derivative"><code class="docutils literal notranslate"><span class="pre">Legendre1D.first_derivative()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.legendre.Legendre1D.second_derivative"><code class="docutils literal notranslate"><span class="pre">Legendre1D.second_derivative()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.legendre.Legendre2D"><code class="docutils literal notranslate"><span class="pre">Legendre2D</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.legendre.Legendre2D.batch_ls_best_fit"><code class="docutils literal notranslate"><span class="pre">Legendre2D.batch_ls_best_fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.legendre.Legendre2D.compute_from_coeffs"><code class="docutils literal notranslate"><span class="pre">Legendre2D.compute_from_coeffs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.legendre.Legendre2D.derivatives_from_coeffs"><code class="docutils literal notranslate"><span class="pre">Legendre2D.derivatives_from_coeffs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.legendre.Legendre2D.evaluate"><code class="docutils literal notranslate"><span class="pre">Legendre2D.evaluate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.legendre.Legendre2D.evaluate_derivatives"><code class="docutils literal notranslate"><span class="pre">Legendre2D.evaluate_derivatives()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.legendre.Legendre2D.evaluate_from_coeffs"><code class="docutils literal notranslate"><span class="pre">Legendre2D.evaluate_from_coeffs()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gnp.geometry.html#module-gnp.geometry">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gnp.models.html">gnp.models module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gnp.models.html#module-gnp.models.gnp">gnp.models.gnp</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gnp.models.html#gnp.models.gnp.BlockGNP"><code class="docutils literal notranslate"><span class="pre">BlockGNP</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gnp.models.html#gnp.models.gnp.BlockGNP.forward"><code class="docutils literal notranslate"><span class="pre">BlockGNP.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gnp.models.html#gnp.models.gnp.PatchGNP"><code class="docutils literal notranslate"><span class="pre">PatchGNP</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gnp.models.html#gnp.models.gnp.PatchGNP.forward"><code class="docutils literal notranslate"><span class="pre">PatchGNP.forward()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gnp.models.html#module-gnp.models.layers">gnp.models.layers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gnp.models.html#gnp.models.layers.BlockConv"><code class="docutils literal notranslate"><span class="pre">BlockConv</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gnp.models.html#gnp.models.layers.BlockConv.forward"><code class="docutils literal notranslate"><span class="pre">BlockConv.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.models.html#gnp.models.layers.BlockConv.message"><code class="docutils literal notranslate"><span class="pre">BlockConv.message()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gnp.models.html#gnp.models.layers.BlockConv.update"><code class="docutils literal notranslate"><span class="pre">BlockConv.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gnp.models.html#gnp.models.layers.BlockKernel"><code class="docutils literal notranslate"><span class="pre">BlockKernel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gnp.models.html#gnp.models.layers.BlockKernel.forward"><code class="docutils literal notranslate"><span class="pre">BlockKernel.forward()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gnp.models.html#module-gnp.models">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-gnp.config">
+<span id="gnp-config-module"></span><h2>gnp.config module<a class="headerlink" href="#module-gnp.config" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gnp.config.load_config">
+<span class="sig-prename descclassname"><span class="pre">gnp.config.</span></span><span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/gnp/config.html#load_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.config.load_config" title="Link to this definition"></a></dt>
+<dd><p>Load a configuration file from a yaml file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) -- Path to the yaml file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary containing the configuration parameters.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gnp.config.load_model">
+<span class="sig-prename descclassname"><span class="pre">gnp.config.</span></span><span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gnp.models.html#gnp.models.gnp.PatchGNP" title="gnp.models.gnp.PatchGNP"><span class="pre">PatchGNP</span></a></span></span><a class="reference internal" href="_modules/gnp/config.html#load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.config.load_model" title="Link to this definition"></a></dt>
+<dd><p>Load a model from a directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_dir</strong> (<em>Path</em>) -- Path to the model directory.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The loaded model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.nn.Module</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gnp.config.load_patchloader">
+<span class="sig-prename descclassname"><span class="pre">gnp.config.</span></span><span class="sig-name descname"><span class="pre">load_patchloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gnp.dataset.html#gnp.dataset.patch.PatchLoader" title="gnp.dataset.patch.PatchLoader"><span class="pre">PatchLoader</span></a></span></span><a class="reference internal" href="_modules/gnp/config.html#load_patchloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.config.load_patchloader" title="Link to this definition"></a></dt>
+<dd><p>Load a PatchLoader using a yaml file in data_dir.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cfg</strong> (<em>dict</em>) -- Dictionary containing the configuration parameters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-gnp.estimator">
+<span id="gnp-estimator-module"></span><h2>gnp.estimator module<a class="headerlink" href="#module-gnp.estimator" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="gnp.estimator.GeometryEstimator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gnp.estimator.</span></span><span class="sig-name descname"><span class="pre">GeometryEstimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pcd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'clean_30k'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">device</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">patch_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gnp/estimator.html#GeometryEstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.estimator.GeometryEstimator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Geometry estimator for a point cloud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pcd</strong> (<em>torch.Tensor</em>) -- Point cloud data.</p></li>
+<li><p><strong>orientation</strong> (<em>torch.Tensor</em>) -- Orientation data.</p></li>
+<li><p><strong>function_values</strong> (<em>Optional</em><em>[</em><em>torch.Tensor</em><em>]</em>) -- Function values for the point cloud.</p></li>
+<li><p><strong>model</strong> (<em>nn.Module</em>) -- Model name.</p></li>
+<li><p><strong>device</strong> (<em>torch.device</em>) -- Device to run the model on.</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) -- Dictionary containing the input data.</p></li>
+<li><p><strong>model_path</strong> (<em>Path</em>) -- Path to the model state dictionary.</p></li>
+<li><p><strong>model</strong> -- Loaded model.</p></li>
+<li><p><strong>config_path</strong> (<em>Path</em>) -- Path to the configuration file.</p></li>
+<li><p><strong>cfg</strong> (<em>dict</em>) -- Configuration dictionary.</p></li>
+<li><p><strong>patch_loader</strong> (<a class="reference internal" href="gnp.dataset.html#gnp.dataset.patch.PatchLoader" title="gnp.dataset.patch.PatchLoader"><em>PatchLoader</em></a>) -- Patch loader object.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.estimator.GeometryEstimator.estimate_quantities">
+<span class="sig-name descname"><span class="pre">estimate_quantities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scalar_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/gnp/estimator.html#GeometryEstimator.estimate_quantities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.estimator.GeometryEstimator.estimate_quantities" title="Link to this definition"></a></dt>
+<dd><p>Estimate geometric quantities on the point cloud. This function returns
+a dictionary containing the estimated scalar and/or vector values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>scalar_names</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) -- List of scalar names to estimate. This can
+be any of the following: 'xyz_coordinates', 'normals', 'tangents',
+'mean_curvature', 'gaussian_curvature', 'pca_coordinates', 'normals_pca',
+'tangents_pca', 'metric', 'shape', 'weingarten', 'inverse_metric',
+'inverse_metric_derivatives', 'det_metric', 'laplace_beltrami_from_coefficients'</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary containing the estimated scalar values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.estimator.GeometryEstimator.flow_step">
+<span class="sig-name descname"><span class="pre">flow_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta_t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample_radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/gnp/estimator.html#GeometryEstimator.flow_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.estimator.GeometryEstimator.flow_step" title="Link to this definition"></a></dt>
+<dd><p>Perform a single step of mean curvature flow on the point cloud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>delta_t</strong> (<em>float</em>) -- Time step for the flow.</p></li>
+<li><p><strong>subsample_radius</strong> (<em>float</em>) -- Radius used for subsampling points.</p></li>
+<li><p><strong>smooth_radius</strong> (<em>float</em>) -- Radius used for smoothing mean curvature.</p></li>
+<li><p><strong>smooth_x</strong> (<em>bool</em>) -- Whether to smooth the point cloud before flow.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary containing the update point cloud data, normals,
+and mean curvature.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.estimator.GeometryEstimator.gmls_weights">
+<span class="sig-name descname"><span class="pre">gmls_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/gnp/estimator.html#GeometryEstimator.gmls_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.estimator.GeometryEstimator.gmls_weights" title="Link to this definition"></a></dt>
+<dd><p>Compute the weights for the generalized moving least squares (GMLS) method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>Batch</em>) -- Batch containing the input data.</p></li>
+<li><p><strong>radius</strong> (<em>float</em><em>, </em><em>optional</em>) -- Radius to truncate weight function. Defaults to 1..</p></li>
+<li><p><strong>p</strong> (<em>int</em><em>, </em><em>optional</em>) -- Degree p of the weight function. Defaults to 4.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of weight matrices for each batch.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[torch.Tensor]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.estimator.GeometryEstimator.laplace_beltrami_legendre_blocks">
+<span class="sig-name descname"><span class="pre">laplace_beltrami_legendre_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch" title="gnp.geometry.surface.SurfacePatch"><span class="pre">SurfacePatch</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/gnp/estimator.html#GeometryEstimator.laplace_beltrami_legendre_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.estimator.GeometryEstimator.laplace_beltrami_legendre_blocks" title="Link to this definition"></a></dt>
+<dd><p>Laplace-Beltrami operator of Legendre basis functions at each center point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>surface</strong> (<a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch" title="gnp.geometry.surface.SurfacePatch"><em>SurfacePatch</em></a>) -- Surface patch object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of outputs at each center point.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[torch.Tensor]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.estimator.GeometryEstimator.legendre_blocks">
+<span class="sig-name descname"><span class="pre">legendre_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch" title="gnp.geometry.surface.SurfacePatch"><span class="pre">SurfacePatch</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/gnp/estimator.html#GeometryEstimator.legendre_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.estimator.GeometryEstimator.legendre_blocks" title="Link to this definition"></a></dt>
+<dd><p>Legendre basis functions blocked by batch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>surface</strong> (<a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch" title="gnp.geometry.surface.SurfacePatch"><em>SurfacePatch</em></a>) -- Surface patch object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of outputs per batch.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[torch.Tensor]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.estimator.GeometryEstimator.mean_flow">
+<span class="sig-name descname"><span class="pre">mean_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_data_per_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample_radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/gnp/estimator.html#GeometryEstimator.mean_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.estimator.GeometryEstimator.mean_flow" title="Link to this definition"></a></dt>
+<dd><p>Perform mean curvature flow on the point cloud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_steps</strong> (<em>int</em>) -- Number of steps to perform.</p></li>
+<li><p><strong>save_data_per_step</strong> (<em>int</em>) -- Save data every n steps.</p></li>
+<li><p><strong>delta_t</strong> (<em>float</em>) -- Time step for the flow.</p></li>
+<li><p><strong>subsample_radius</strong> (<em>float</em>) -- Radius used for subsampling points.</p></li>
+<li><p><strong>smooth_radius</strong> (<em>float</em>) -- Radius used for smoothing mean curvature.</p></li>
+<li><p><strong>smooth_x</strong> (<em>bool</em>) -- Whether to smooth the point cloud before flow.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of dictionaries containing the updated point cloud data
+and normals at each saved time step.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.estimator.GeometryEstimator.stiffness_matrix_gmls">
+<span class="sig-name descname"><span class="pre">stiffness_matrix_gmls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">drop_ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_outliers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">coo_matrix</span></span></span><a class="reference internal" href="_modules/gnp/estimator.html#GeometryEstimator.stiffness_matrix_gmls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.estimator.GeometryEstimator.stiffness_matrix_gmls" title="Link to this definition"></a></dt>
+<dd><p>Compute the stiffness matrix using the generalized moving least squares (GMLS) method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>drop_ratio</strong> (<em>float</em><em>, </em><em>optional</em>) -- Ratio of points to drop. Defaults to 0.1.</p></li>
+<li><p><strong>radius</strong> (<em>float</em><em>, </em><em>optional</em>) -- Radius to truncate weight function. Defaults to 1..</p></li>
+<li><p><strong>p</strong> (<em>int</em><em>, </em><em>optional</em>) -- Degree p of the weight function. Defaults to 4.</p></li>
+<li><p><strong>remove_outliers</strong> (<em>bool</em><em>, </em><em>optional</em>) -- Whether to remove outliers. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Stiffness matrix.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sp.coo_matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.estimator.GeometryEstimator.stiffness_on_batch">
+<span class="sig-name descname"><span class="pre">stiffness_on_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/gnp/estimator.html#GeometryEstimator.stiffness_on_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.estimator.GeometryEstimator.stiffness_on_batch" title="Link to this definition"></a></dt>
+<dd><p>Compute the stiffness matrix on a batch of data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>Batch</em>) -- Batch containing the input data.</p></li>
+<li><p><strong>radius</strong> (<em>float</em><em>, </em><em>optional</em>) -- Radius to truncate weight function. Defaults to 1..</p></li>
+<li><p><strong>p</strong> (<em>int</em><em>, </em><em>optional</em>) -- Degree p of the weight function. Defaults to 4.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Indices and values of the stiffness matrix.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.estimator.GeometryEstimator.surface_patch">
+<span class="sig-name descname"><span class="pre">surface_patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Batch</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch" title="gnp.geometry.surface.SurfacePatch"><span class="pre">SurfacePatch</span></a></span></span><a class="reference internal" href="_modules/gnp/estimator.html#GeometryEstimator.surface_patch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.estimator.GeometryEstimator.surface_patch" title="Link to this definition"></a></dt>
+<dd><p>Create a SurfacePatch from the input patch data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>patch_data</strong> (<em>Batch</em>) -- Batch containing the input patch data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>SurfacePatch object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="gnp.geometry.html#gnp.geometry.surface.SurfacePatch" title="gnp.geometry.surface.SurfacePatch">SurfacePatch</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-gnp.utils">
+<span id="gnp-utils-module"></span><h2>gnp.utils module<a class="headerlink" href="#module-gnp.utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gnp.utils.smooth_values_by_gaussian">
+<span class="sig-prename descclassname"><span class="pre">gnp.utils.</span></span><span class="sig-name descname"><span class="pre">smooth_values_by_gaussian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/gnp/utils.html#smooth_values_by_gaussian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.utils.smooth_values_by_gaussian" title="Link to this definition"></a></dt>
+<dd><p>Smooth values by a truncated Gaussian kernel over a given radius. This is used
+in simulating mean curvature flow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>torch.Tensor</em>) -- Input data points</p></li>
+<li><p><strong>values</strong> (<em>torch.Tensor</em>) -- Values to be smoothed</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) -- Radius for truncating the Gaussian kernel. The standard deviation
+of the Gaussian is set to one third of the radius.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Smoothed values</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gnp.utils.subsample_points_by_radius">
+<span class="sig-prename descclassname"><span class="pre">gnp.utils.</span></span><span class="sig-name descname"><span class="pre">subsample_points_by_radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">LongTensor</span></span></span><a class="reference internal" href="_modules/gnp/utils.html#subsample_points_by_radius"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.utils.subsample_points_by_radius" title="Link to this definition"></a></dt>
+<dd><p>Subsample points by radius. This is used in simulating mean curvature flow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>torch.Tensor</em>) -- Points to subsample</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) -- Radius for subsampling</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Indices of subsampled points</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.LongTensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-gnp">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gnp" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Blaine Quackenbush, Paul J. Atzberger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

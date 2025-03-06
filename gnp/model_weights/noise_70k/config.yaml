@@ -1,0 +1,9 @@
+graph_radius: 0.2
+batch_size: 128
+center: tree
+knn: 70
+shuffle_patches: true
+pca: true
+degree: 3
+min_z_scale: 0.03
+device: cpu

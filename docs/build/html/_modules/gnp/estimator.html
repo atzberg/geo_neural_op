@@ -1,0 +1,516 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gnp.estimator &mdash; Geometric Neural Operator 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=0ea5f55c"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Geometric Neural Operator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../gnp.estimator.html">estimator.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gnp.models.html">gnp.models module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gnp.geometry.html">gnp.geometry module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gnp.dataset.html">gnp.dataset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gnp.utils.html">utils.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gnp.config.html">config.py</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Geometric Neural Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gnp.estimator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for gnp.estimator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch_geometric.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Batch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch_geometric.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">fps</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_config</span><span class="p">,</span> <span class="n">load_model</span><span class="p">,</span> <span class="n">load_patchloader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.geometry.surface</span><span class="w"> </span><span class="kn">import</span> <span class="n">SurfacePatch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">smooth_values_by_gaussian</span><span class="p">,</span> <span class="n">subsample_points_by_radius</span> 
+
+<span class="n">MODEL_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;model_weights&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GeometryEstimator">
+<a class="viewcode-back" href="../../gnp.estimator.html#gnp.estimator.GeometryEstimator">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GeometryEstimator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Geometry estimator for a point cloud.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pcd : torch.Tensor</span>
+<span class="sd">        Point cloud data.</span>
+<span class="sd">    orientation : torch.Tensor</span>
+<span class="sd">        Orientation data.</span>
+<span class="sd">    function_values : Optional[torch.Tensor]</span>
+<span class="sd">        Function values for the point cloud.</span>
+<span class="sd">    model : str</span>
+<span class="sd">        Model name.</span>
+<span class="sd">    device : torch.device</span>
+<span class="sd">        Device to run the model on.</span>
+<span class="sd">    data : dict</span>
+<span class="sd">        Dictionary containing the input data.</span>
+<span class="sd">    model_path : Path</span>
+<span class="sd">        Path to the model state dictionary.</span>
+<span class="sd">    model : nn.Module</span>
+<span class="sd">        Loaded model.</span>
+<span class="sd">    config_path : Path</span>
+<span class="sd">        Path to the configuration file.</span>
+<span class="sd">    cfg : dict</span>
+<span class="sd">        Configuration dictionary.</span>
+<span class="sd">    patch_loader : PatchLoader</span>
+<span class="sd">        Patch loader object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">pcd</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+                 <span class="n">orientation</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+                 <span class="n">function_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;clean_30k&#39;</span><span class="p">,</span>
+                 <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">patch_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]):</span>
+        
+        <span class="k">assert</span> <span class="n">model</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;clean_30k&#39;</span><span class="p">,</span> <span class="s1">&#39;clean_50k&#39;</span><span class="p">,</span> <span class="s1">&#39;noise_70k&#39;</span><span class="p">,</span> <span class="s1">&#39;outlier_50k&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pcd</span> <span class="o">=</span> <span class="n">pcd</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">orientation</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcd</span><span class="p">,</span> 
+                     <span class="s1">&#39;normals&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="p">}</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_path</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">MODEL_PATH</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="s1">&#39;state_dict.pth&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_path</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">MODEL_PATH</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="s1">&#39;config.yaml&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;device&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patch_loader</span> <span class="o">=</span> <span class="n">load_patchloader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">,</span> <span class="o">**</span><span class="n">patch_kwargs</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">function_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">function_values</span> <span class="o">=</span> <span class="n">function_values</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;function_values&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">function_values</span>
+    
+<div class="viewcode-block" id="GeometryEstimator.surface_patch">
+<a class="viewcode-back" href="../../gnp.estimator.html#gnp.estimator.GeometryEstimator.surface_patch">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">surface_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch_data</span><span class="p">:</span> <span class="n">Batch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SurfacePatch</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a SurfacePatch from the input patch data.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        patch_data : Batch</span>
+<span class="sd">            Batch containing the input patch data.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        SurfacePatch</span>
+<span class="sd">            SurfacePatch object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">surface_coefficients</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">patch_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">SurfacePatch</span><span class="p">(</span><span class="n">patch_data</span><span class="p">,</span> <span class="n">surface_coefficients</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="GeometryEstimator.estimate_quantities">
+<a class="viewcode-back" href="../../gnp.estimator.html#gnp.estimator.GeometryEstimator.estimate_quantities">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">estimate_quantities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimate geometric quantities on the point cloud. This function returns </span>
+<span class="sd">        a dictionary containing the estimated scalar and/or vector values.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            scalar_names (list[str]): List of scalar names to estimate. This can</span>
+<span class="sd">                be any of the following: &#39;xyz_coordinates&#39;, &#39;normals&#39;, &#39;tangents&#39;, </span>
+<span class="sd">                &#39;mean_curvature&#39;, &#39;gaussian_curvature&#39;, &#39;pca_coordinates&#39;, &#39;normals_pca&#39;,</span>
+<span class="sd">                &#39;tangents_pca&#39;, &#39;metric&#39;, &#39;shape&#39;, &#39;weingarten&#39;, &#39;inverse_metric&#39;,</span>
+<span class="sd">                &#39;inverse_metric_derivatives&#39;, &#39;det_metric&#39;, &#39;laplace_beltrami_from_coefficients&#39;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Dictionary containing the estimated scalar values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">data_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcd</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">patch_dataloader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_loader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">patch_dataloader</span><span class="p">:</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">cluster_mask</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+            
+            <span class="n">patch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface_patch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">scalar_names</span><span class="p">:</span>
+                <span class="n">quantity</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">quantity</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown scalar name: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+                    <span class="n">output</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">data_size</span><span class="p">,</span> <span class="o">*</span><span class="n">quantity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> 
+                                               <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                <span class="n">output</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">quantity</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        
+        <span class="k">return</span> <span class="n">output</span></div>
+
+    
+    
+<div class="viewcode-block" id="GeometryEstimator.flow_step">
+<a class="viewcode-back" href="../../gnp.estimator.html#gnp.estimator.GeometryEstimator.flow_step">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">flow_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                  <span class="n">delta_t</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> 
+                  <span class="n">subsample_radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> 
+                  <span class="n">smooth_radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> 
+                  <span class="n">smooth_x</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform a single step of mean curvature flow on the point cloud.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            delta_t (float): Time step for the flow.</span>
+<span class="sd">            subsample_radius (float): Radius used for subsampling points.</span>
+<span class="sd">            smooth_radius (float): Radius used for smoothing mean curvature.</span>
+<span class="sd">            smooth_x (bool): Whether to smooth the point cloud before flow.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Dictionary containing the update point cloud data, normals, </span>
+<span class="sd">            and mean curvature.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        
+        <span class="k">if</span> <span class="n">smooth_x</span><span class="p">:</span>
+            <span class="n">estimate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_quantities</span><span class="p">([</span><span class="s1">&#39;xyz_coordinates&#39;</span><span class="p">])</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">estimate</span><span class="p">[</span><span class="s1">&#39;xyz_coordinates&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pcd</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        
+        <span class="n">estimate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_quantities</span><span class="p">([</span><span class="s1">&#39;normals&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_curvature&#39;</span><span class="p">])</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcd</span>
+        <span class="n">normals</span> <span class="o">=</span> <span class="n">estimate</span><span class="p">[</span><span class="s1">&#39;normals&#39;</span><span class="p">]</span>
+        <span class="n">mean_curvature</span> <span class="o">=</span> <span class="n">smooth_values_by_gaussian</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                                                   <span class="n">values</span><span class="o">=</span><span class="n">estimate</span><span class="p">[</span><span class="s1">&#39;mean_curvature&#39;</span><span class="p">],</span>
+                                                   <span class="n">radius</span><span class="o">=</span><span class="n">smooth_radius</span><span class="p">)</span>
+        <span class="n">new_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">delta_t</span> <span class="o">*</span> <span class="n">mean_curvature</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">normals</span>
+        <span class="n">subsampled_indices</span> <span class="o">=</span> <span class="n">subsample_points_by_radius</span><span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="n">subsample_radius</span><span class="p">)</span>
+        <span class="n">new_x</span> <span class="o">=</span> <span class="n">new_x</span><span class="p">[</span><span class="n">subsampled_indices</span><span class="p">]</span>
+        <span class="n">new_normals</span> <span class="o">=</span> <span class="n">normals</span><span class="p">[</span><span class="n">subsampled_indices</span><span class="p">]</span>
+        <span class="n">mean_curvature</span> <span class="o">=</span> <span class="n">mean_curvature</span><span class="p">[</span><span class="n">subsampled_indices</span><span class="p">]</span>
+
+        <span class="n">new_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">new_x</span><span class="p">,</span> 
+                    <span class="s1">&#39;normals&#39;</span><span class="p">:</span> <span class="n">new_normals</span><span class="p">,</span> 
+                    <span class="s1">&#39;mean_curvature&#39;</span><span class="p">:</span> <span class="n">mean_curvature</span><span class="p">}</span>
+        
+        <span class="k">return</span> <span class="n">new_data</span></div>
+
+
+        
+<div class="viewcode-block" id="GeometryEstimator.mean_flow">
+<a class="viewcode-back" href="../../gnp.estimator.html#gnp.estimator.GeometryEstimator.mean_flow">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mean_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">num_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                  <span class="n">save_data_per_step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                  <span class="n">delta_t</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                  <span class="n">subsample_radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                  <span class="n">smooth_radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                  <span class="n">smooth_x</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform mean curvature flow on the point cloud.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            num_steps (int): Number of steps to perform.</span>
+<span class="sd">            save_data_per_step (int): Save data every n steps.</span>
+<span class="sd">            delta_t (float): Time step for the flow.</span>
+<span class="sd">            subsample_radius (float): Radius used for subsampling points. </span>
+<span class="sd">            smooth_radius (float): Radius used for smoothing mean curvature.</span>
+<span class="sd">            smooth_x (bool): Whether to smooth the point cloud before flow.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[dict]: List of dictionaries containing the updated point cloud data</span>
+<span class="sd">            and normals at each saved time step.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        
+        <span class="n">save_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">)):</span>
+            <span class="n">new_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_step</span><span class="p">(</span><span class="n">delta_t</span><span class="o">=</span><span class="n">delta_t</span><span class="p">,</span>
+                                      <span class="n">subsample_radius</span><span class="o">=</span><span class="n">subsample_radius</span><span class="p">,</span>
+                                      <span class="n">smooth_radius</span><span class="o">=</span><span class="n">smooth_radius</span><span class="p">,</span>
+                                      <span class="n">smooth_x</span><span class="o">=</span><span class="n">smooth_x</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">new_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pcd</span> <span class="o">=</span> <span class="n">new_data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">new_data</span><span class="p">[</span><span class="s1">&#39;normals&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">save_data_per_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">save_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_data</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        
+        <span class="k">return</span> <span class="n">save_data</span></div>
+
+    
+<div class="viewcode-block" id="GeometryEstimator.gmls_weights">
+<a class="viewcode-back" href="../../gnp.estimator.html#gnp.estimator.GeometryEstimator.gmls_weights">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gmls_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Batch</span><span class="p">,</span> 
+                     <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> 
+                     <span class="n">p</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the weights for the generalized moving least squares (GMLS) method.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            batch (Batch): Batch containing the input data.</span>
+<span class="sd">            radius (float, optional): Radius to truncate weight function. Defaults to 1..</span>
+<span class="sd">            p (int, optional): Degree p of the weight function. Defaults to 4.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[torch.Tensor]: List of weight matrices for each batch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>     
+        <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">batch</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">batch</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">num_graphs</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="n">centers</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">batch</span><span class="o">.</span><span class="n">cluster_mask</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">cxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="n">centers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xs</span><span class="p">)]</span>
+        <span class="n">Ws</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span>
+                <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cxs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">radius</span><span class="p">)</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">num_graphs</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">Ws</span></div>
+
+    
+<div class="viewcode-block" id="GeometryEstimator.laplace_beltrami_legendre_blocks">
+<a class="viewcode-back" href="../../gnp.estimator.html#gnp.estimator.GeometryEstimator.laplace_beltrami_legendre_blocks">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">laplace_beltrami_legendre_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                                         <span class="n">surface</span><span class="p">:</span> <span class="n">SurfacePatch</span>
+                                         <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Laplace-Beltrami operator of Legendre basis functions at each center point.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            surface (SurfacePatch): Surface patch object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[torch.Tensor]: List of outputs at each center point.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">lb_values</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">laplace_beltrami_legendre_basis</span><span class="p">[</span><span class="n">surface</span><span class="o">.</span><span class="n">cluster_mask</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">lb_values</span><span class="p">,</span> <span class="n">split_size_or_sections</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="GeometryEstimator.legendre_blocks">
+<a class="viewcode-back" href="../../gnp.estimator.html#gnp.estimator.GeometryEstimator.legendre_blocks">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">legendre_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">SurfacePatch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Legendre basis functions blocked by batch.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            surface (SurfacePatch): Surface patch object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[torch.Tensor]: List of outputs per batch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">mask</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">batch</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        
+        <span class="n">legendre_values</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">surface</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">legendre_blocks</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">legendre_values</span><span class="p">[</span><span class="n">batch</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">legendre_blocks</span></div>
+
+    
+<div class="viewcode-block" id="GeometryEstimator.stiffness_on_batch">
+<a class="viewcode-back" href="../../gnp.estimator.html#gnp.estimator.GeometryEstimator.stiffness_on_batch">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stiffness_on_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                           <span class="n">batch</span><span class="p">:</span> <span class="n">Batch</span><span class="p">,</span> 
+                           <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> 
+                           <span class="n">p</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the stiffness matrix on a batch of data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            batch (Batch): Batch containing the input data.</span>
+<span class="sd">            radius (float, optional): Radius to truncate weight function. Defaults to 1..</span>
+<span class="sd">            p (int, optional): Degree p of the weight function. Defaults to 4.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            torch.Tensor: Indices and values of the stiffness matrix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">Ws</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gmls_weights</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface_patch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+        <span class="n">legendre_blocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">legendre_blocks</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
+        <span class="n">lb_blocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">laplace_beltrami_legendre_blocks</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
+        
+        <span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">((</span><span class="n">leg</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">W</span> <span class="o">@</span> <span class="n">leg</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="p">(</span><span class="n">leg</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">W</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;gelsd&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">leg</span><span class="p">,</span> <span class="n">W</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">legendre_blocks</span><span class="p">,</span> <span class="n">Ws</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">stiffness_values</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span>
+            <span class="o">-</span><span class="n">lb</span> <span class="o">@</span> <span class="n">output</span><span class="o">.</span><span class="n">solution</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> 
+            <span class="k">for</span> <span class="n">lb</span><span class="p">,</span> <span class="n">output</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">lb_blocks</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+            <span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        
+        <span class="n">row_inds</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="n">surface</span><span class="o">.</span><span class="n">cluster_mask</span><span class="p">]</span>
+        <span class="n">column_inds</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">batch</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ind</span><span class="p">[</span><span class="n">batch</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">num_graphs</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="n">stiffness_indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">row_inds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">column_inds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> 
+                 <span class="n">column_inds</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">num_graphs</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">stiffness_indices</span><span class="p">,</span> <span class="n">stiffness_values</span></div>
+
+    
+    
+<div class="viewcode-block" id="GeometryEstimator.stiffness_matrix_gmls">
+<a class="viewcode-back" href="../../gnp.estimator.html#gnp.estimator.GeometryEstimator.stiffness_matrix_gmls">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stiffness_matrix_gmls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                              <span class="n">drop_ratio</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                              <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> 
+                              <span class="n">p</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                              <span class="n">remove_outliers</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the stiffness matrix using the generalized moving least squares (GMLS) method.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            drop_ratio (float, optional): Ratio of points to drop. Defaults to 0.1.</span>
+<span class="sd">            radius (float, optional): Radius to truncate weight function. Defaults to 1..</span>
+<span class="sd">            p (int, optional): Degree p of the weight function. Defaults to 4.</span>
+<span class="sd">            remove_outliers (bool, optional): Whether to remove outliers. Defaults to False.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            sp.coo_matrix: Stiffness matrix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">remove_outliers</span><span class="p">:</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_quantities</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;pca_coordinates&#39;</span><span class="p">])</span>
+            <span class="n">outlier_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;x&#39;</span> <span class="o">-</span> <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;pca_coordinates&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">outlier_mask</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pcd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcd</span><span class="p">[</span><span class="n">outlier_mask</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="p">[</span><span class="n">outlier_mask</span><span class="p">]</span>
+        
+        <span class="n">drop_inds</span> <span class="o">=</span> <span class="n">fps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pcd</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="n">drop_ratio</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;stiffness_mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pcd</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> 
+                                                 <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span>
+                                                 <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;stiffness_mask&#39;</span><span class="p">][</span><span class="n">drop_inds</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">patch_loader</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="s1">&#39;gmls&#39;</span>
+        <span class="n">patch_dataloader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_loader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">stiffness_indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">stiffness_values</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">patch_dataloader</span><span class="p">):</span>
+            <span class="n">batch</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">batch</span><span class="o">.</span><span class="n">stiffness_mask</span>
+            <span class="n">indices</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stiffness_on_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+            <span class="n">stiffness_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+            <span class="n">stiffness_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        
+        <span class="n">stiffness_indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">stiffness_indices</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">stiffness_values</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">stiffness_values</span><span class="p">)</span>
+        
+        <span class="n">notmask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;stiffness_mask&#39;</span><span class="p">])</span>
+        <span class="n">skipped</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;stiffness_mask&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+                               <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)[</span><span class="n">notmask</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">skipped</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">subtract_index_value</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">stiffness_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+                                                    <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">num_iters</span> <span class="o">=</span> <span class="n">skipped</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10</span>
+            <span class="n">num_iters</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_iters</span><span class="p">)</span> <span class="k">if</span> <span class="n">num_iters</span> <span class="o">%</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_iters</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_iters</span><span class="p">):</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">10</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">skipped</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">subtract_index_value</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="n">stiffness_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">skipped</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">stiffness_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">stiffness_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">subtract_index_value</span><span class="o">.</span><span class="n">long</span><span class="p">()</span>
+        
+        <span class="n">stiffness</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span>
+            <span class="n">stiffness_values</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> 
+            <span class="n">stiffness_indices</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+        <span class="p">))</span>
+        <span class="k">return</span> <span class="n">stiffness</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Blaine Quackenbush, Paul J. Atzberger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

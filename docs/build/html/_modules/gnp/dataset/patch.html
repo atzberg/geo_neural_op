@@ -1,0 +1,490 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gnp.dataset.patch &mdash; Geometric Neural Operator 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=0ea5f55c"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Geometric Neural Operator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../gnp.estimator.html">estimator.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gnp.models.html">gnp.models module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gnp.geometry.html">gnp.geometry module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gnp.dataset.html">gnp.dataset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gnp.utils.html">utils.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gnp.config.html">config.py</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Geometric Neural Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gnp.dataset.patch</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for gnp.dataset.patch</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch_geometric</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">KDTree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch_geometric.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">Data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch_geometric.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">radius_graph</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.pca</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCABatch</span>
+
+<div class="viewcode-block" id="graph_from_dict">
+<a class="viewcode-back" href="../../../gnp.dataset.html#gnp.dataset.patch.graph_from_dict">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">graph_from_dict</span><span class="p">(</span><span class="n">sample</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> 
+                    <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> 
+                    <span class="n">max_num_neighbors</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Construct a graph from a dictionary of node features and other data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sample : dict</span>
+<span class="sd">        Dictionary containing the node features and other data.</span>
+<span class="sd">    radius : float</span>
+<span class="sd">        Radius for the radius graph.</span>
+<span class="sd">    max_num_neighbors : int, optional</span>
+<span class="sd">        Maximum number of neighbors per node. Defaults to 32.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    torch_geometric.data.Data</span>
+<span class="sd">        A graph data object containing node features, edge indices, and edge attributes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="n">x</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+    <span class="n">x_device</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">device</span>
+    <span class="n">edge_data</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;edge_data&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">edge_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">edge_data</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">KDTree</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query_ball_point</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">r</span><span class="o">=</span><span class="n">radius</span><span class="p">)</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">max_num_neighbors</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols</span>
+        <span class="p">]</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">]</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cols</span><span class="p">)]</span>
+    <span class="n">edge_ind</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">rows</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">cols</span><span class="p">)),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">edge_attr</span> <span class="o">=</span> <span class="n">edge_data</span><span class="p">[</span><span class="n">edge_ind</span><span class="o">.</span><span class="n">t</span><span class="p">()]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">edge_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">Data</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                <span class="n">edge_index</span><span class="o">=</span><span class="n">edge_ind</span><span class="p">,</span>
+                <span class="n">edge_attr</span><span class="o">=</span><span class="n">edge_attr</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sample</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;edge_data&#39;</span><span class="p">]:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">x_device</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="PatchGenerator">
+<a class="viewcode-back" href="../../../gnp.dataset.html#gnp.dataset.patch.PatchGenerator">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PatchGenerator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    PatchLoader class that generates patches from a point cloud.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            Point cloud data. Must include keys &#39;x&#39; for point cloud and </span>
+<span class="sd">            &#39;normals&#39; which must have the correct orientation of the pointcloud.</span>
+<span class="sd">            The normals do not need to be accurate other than the orientation.</span>
+<span class="sd">        graph_radius : float</span>
+<span class="sd">            Radius for graph construction.</span>
+<span class="sd">        batch_size : int, optional</span>
+<span class="sd">            Batch size. Defaults to 1.</span>
+<span class="sd">        center : str, optional</span>
+<span class="sd">            Method for choosing patch centers. If &#39;tree&#39;, a KDTree is used to ensure patches </span>
+<span class="sd">            completely cover the point cloud. If &#39;gmls&#39;, there is one patch for every point </span>
+<span class="sd">            in the data. Defaults to &#39;tree&#39;.</span>
+<span class="sd">        shuffle_patches : bool, optional</span>
+<span class="sd">            Whether to shuffle patches. Defaults to True.</span>
+<span class="sd">        knn : int, optional</span>
+<span class="sd">            Number of neighbors to choose for patch construction. Defaults to 50.</span>
+<span class="sd">        min_radius : float, optional</span>
+<span class="sd">            Minimum patch radius. Defaults to 0.01.</span>
+<span class="sd">        pca : bool, optional</span>
+<span class="sd">            If True, returns patch in local PCA coordinates. Defaults to True.</span>
+<span class="sd">        degree : int, optional</span>
+<span class="sd">            Maximum degree of 1D Legendre basis if pca is True. Defaults to 3.</span>
+<span class="sd">        orientation : Optional[torch.Tensor], optional</span>
+<span class="sd">            Orientation used if pca is True. Defaults to None.</span>
+<span class="sd">        scale : bool, optional</span>
+<span class="sd">            If True, scaling is used if pca is also True. Defaults to True.</span>
+<span class="sd">        include_scale : bool, optional</span>
+<span class="sd">            If True, includes scale in the output. Defaults to True.</span>
+<span class="sd">        min_z_scale : float, optional</span>
+<span class="sd">            Minimum scale used in pca rescaling. Defaults to 1e-3.</span>
+<span class="sd">        max_num_neighbors : int, optional</span>
+<span class="sd">            Maximum neighbors used in graph construction. Defaults to 32.</span>
+<span class="sd">        device : str, optional</span>
+<span class="sd">            Device to use. Defaults to &#39;cpu&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+                 <span class="n">graph_radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">center</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;tree&#39;</span><span class="p">,</span>
+                 <span class="n">shuffle_patches</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">knn</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                 <span class="n">min_radius</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                 <span class="n">pca</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">degree</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                 <span class="n">orientation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">min_z_scale</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+                 <span class="n">max_num_neighbors</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+                 <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">):</span>     
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_radius</span> <span class="o">=</span> <span class="n">graph_radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle_patches</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">KDTree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">knn</span> <span class="o">=</span> <span class="n">knn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_radius</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">min_radius</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">centers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_centers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_num_neighbors</span> <span class="o">=</span> <span class="n">max_num_neighbors</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randperm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">centers</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">centers</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">center_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">centers</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_patches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">centers</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">knn_dist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">knn_ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">center_data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">knn</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.05</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">knn_dist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">knn_dist</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;clusters&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clusters</span> <span class="o">=</span> <span class="n">tg</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">knn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">center_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">patch_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_patch_indices</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pca</span> <span class="o">=</span> <span class="n">pca</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">degree</span> <span class="o">=</span> <span class="n">degree</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_z_scale</span> <span class="o">=</span> <span class="n">min_z_scale</span>
+        
+<div class="viewcode-block" id="PatchGenerator.get_centers">
+<a class="viewcode-back" href="../../../gnp.dataset.html#gnp.dataset.patch.PatchGenerator.get_centers">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_centers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">:</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;        </span>
+<span class="sd">        Choose the centers of the patches.</span>
+<span class="sd">        If `self.center` is &#39;tree&#39;, the centers are chosen so that there is sufficient</span>
+<span class="sd">        coverage of the data. If `self.center` is &#39;gmls&#39;, there is one patch center</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        torch.LongTensor</span>
+<span class="sd">            Indices of the patch centers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="o">==</span> <span class="s1">&#39;tree&#39;</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">k</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">knn</span><span class="o">//</span><span class="mi">3</span><span class="p">))</span>
+            <span class="n">centers</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+            <span class="n">arange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">while</span> <span class="n">mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">arange</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+                <span class="n">centers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+                <span class="n">mask</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">centers</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">(</span><span class="n">centers</span><span class="p">)</span>
+            
+            <span class="n">knn_dist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">knn_ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">cpu</span><span class="p">()[</span><span class="n">centers</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> 
+                                                          <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">knn</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">knn_dist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">knn_dist</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            
+            <span class="n">clusters</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+            <span class="n">arange</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">knn_ind</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">knn_ind</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">clusters</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">knn_ind</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]]</span> <span class="o">=</span> <span class="n">arange</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clusters</span> <span class="o">=</span> <span class="n">clusters</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="o">==</span> <span class="s1">&#39;gmls&#39;</span><span class="p">:</span>
+            <span class="n">centers</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">knn_dist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">knn_ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> 
+                                                          <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">knn</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">knn_dist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">knn_dist</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clusters</span> <span class="o">=</span> <span class="n">centers</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">centers</span></div>
+
+    
+<div class="viewcode-block" id="PatchGenerator.get_patch_indices">
+<a class="viewcode-back" href="../../../gnp.dataset.html#gnp.dataset.patch.PatchGenerator.get_patch_indices">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_patch_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns indices of the patches and buffer regions.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple of list of int</span>
+<span class="sd">            patch_idx : list of int</span>
+<span class="sd">                List of indices of the patches.</span>
+<span class="sd">            buffer_idx : list of int</span>
+<span class="sd">                List of indices of the buffer regions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>     
+           
+        <span class="n">radii</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">1.1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">knn_dist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_radius</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">patch_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">query_ball_point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">center_data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span>
+                                               <span class="n">r</span><span class="o">=</span><span class="n">radii</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">buffer_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">query_ball_point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">center_data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span>
+                                                <span class="n">r</span><span class="o">=</span><span class="mf">1.25</span><span class="o">*</span><span class="n">radii</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">patch_idx</span><span class="p">,</span> <span class="n">buffer_idx</span></div>
+
+        
+        
+
+<div class="viewcode-block" id="PatchGenerator.get_patch">
+<a class="viewcode-back" href="../../../gnp.dataset.html#gnp.dataset.patch.PatchGenerator.get_patch">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Data</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a single patch in the form of a torch_geometric Data object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        idx : int</span>
+<span class="sd">            Index of the patch to return.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Data</span>
+<span class="sd">            torch_geometric Data object containing the patch and all the associated data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        
+        <span class="n">eval_patch_idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch_idx</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">buffer_patch_idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer_idx</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        
+        <span class="n">extra_patch_idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">buffer_patch_idx</span> 
+                                        <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">eval_patch_idx</span><span class="p">],</span> 
+                                       <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">patch_idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">eval_patch_idx</span><span class="p">,</span> <span class="n">extra_patch_idx</span><span class="p">))</span><span class="o">.</span><span class="n">long</span><span class="p">()</span>
+        
+        <span class="n">cluster_mask</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clusters</span><span class="p">[</span><span class="n">patch_idx</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">clusters</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">centers</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">eval_patch_idx</span><span class="p">),</span>
+                          <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">extra_patch_idx</span><span class="p">)),</span> 
+                         <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">bool</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">patch_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">patch_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="n">patch_idx</span><span class="p">]</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="n">graph_from_dict</span><span class="p">(</span><span class="n">patch_data</span><span class="p">,</span> 
+                               <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_radius</span><span class="p">,</span>
+                               <span class="n">max_num_neighbors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_num_neighbors</span><span class="p">)</span>
+
+        <span class="n">data</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">cluster_mask</span> <span class="o">=</span> <span class="n">cluster_mask</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">ind</span> <span class="o">=</span> <span class="n">patch_idx</span>
+
+        <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_idx</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_idx</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_idx</span> <span class="o">+=</span> <span class="n">diff</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="n">Batch</span><span class="o">.</span><span class="n">from_data_list</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">get_patch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">diff</span><span class="p">)])</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pca</span><span class="p">:</span>
+            <span class="n">pca_mapper</span> <span class="o">=</span> <span class="n">PCABatch</span><span class="p">(</span><span class="n">num_graphs</span><span class="o">=</span><span class="n">batch</span><span class="o">.</span><span class="n">num_graphs</span><span class="p">,</span>
+                                  <span class="n">degree</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">,</span>
+                                  <span class="n">min_z_scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_z_scale</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pca_mapper</span><span class="o">.</span><span class="n">to_pca</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">batch</span></div>
+
+
+
+<div class="viewcode-block" id="PatchLoader">
+<a class="viewcode-back" href="../../../gnp.dataset.html#gnp.dataset.patch.PatchLoader">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PatchLoader</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    PatchLoader class that outputs a PatchGenerator instance when given PCD data.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        graph_radius : float</span>
+<span class="sd">            Radius for graph construction.</span>
+<span class="sd">        batch_size : int, optional</span>
+<span class="sd">            Batch size. Defaults to 1.</span>
+<span class="sd">        center : str, optional</span>
+<span class="sd">            Method for choosing patch centers. If &#39;tree&#39;, a KDTree is used to ensure patches </span>
+<span class="sd">            completely cover the point cloud. If &#39;gmls&#39;, there is one patch for every point </span>
+<span class="sd">            in the data. Defaults to &#39;tree&#39;.</span>
+<span class="sd">        shuffle_patches : bool, optional</span>
+<span class="sd">            Whether to shuffle patches. Defaults to True.</span>
+<span class="sd">        knn : int, optional</span>
+<span class="sd">            Number of neighbors to choose for patch construction. Defaults to 50.</span>
+<span class="sd">        min_radius : float, optional</span>
+<span class="sd">            Minimum patch radius. Defaults to 0.01.</span>
+<span class="sd">        pca : bool, optional</span>
+<span class="sd">            If True, returns patch in local PCA coordinates. Defaults to True.</span>
+<span class="sd">        degree : int, optional</span>
+<span class="sd">            Maximum degree of 1D Legendre basis if pca is True. Defaults to 3.</span>
+<span class="sd">        min_z_scale : float, optional</span>
+<span class="sd">            Minimum scale used in pca rescaling. Defaults to 1e-3.</span>
+<span class="sd">        max_num_neighbors : int, optional</span>
+<span class="sd">            Maximum neighbors used in graph construction. Defaults to 32.</span>
+<span class="sd">        device : str, optional</span>
+<span class="sd">            Device to use. Defaults to &#39;cpu&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">graph_radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">center</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;tree&#39;</span><span class="p">,</span>
+                 <span class="n">shuffle_patches</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">knn</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                 <span class="n">min_radius</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                 <span class="n">pca</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">degree</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                 <span class="n">min_z_scale</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+                 <span class="n">max_num_neighbors</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+                 <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">):</span>
+       
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_radius</span> <span class="o">=</span> <span class="n">graph_radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle_patches</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">knn</span> <span class="o">=</span> <span class="n">knn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_radius</span> <span class="o">=</span> <span class="n">min_radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pca</span> <span class="o">=</span> <span class="n">pca</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">degree</span> <span class="o">=</span> <span class="n">degree</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_z_scale</span> <span class="o">=</span> <span class="n">min_z_scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_num_neighbors</span> <span class="o">=</span> <span class="n">max_num_neighbors</span>
+        
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PatchGenerator</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a PatchGenerator object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            Point cloud data. Must include keys &#39;x&#39; for point cloud and </span>
+<span class="sd">            &#39;normals&#39; which must have the correct orientation of the pointcloud.</span>
+<span class="sd">            The normals do not need to be accurate other than the orientation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PatchGenerator</span>
+<span class="sd">            PatchGenerator object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="k">return</span> <span class="n">PatchGenerator</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                              <span class="n">graph_radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_radius</span><span class="p">,</span>
+                              <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+                              <span class="n">shuffle_patches</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span><span class="p">,</span>
+                              <span class="n">center</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">center</span><span class="p">,</span>
+                              <span class="n">knn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">knn</span><span class="p">,</span>
+                              <span class="n">min_radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_radius</span><span class="p">,</span>
+                              <span class="n">pca</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pca</span><span class="p">,</span>
+                              <span class="n">degree</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">,</span>
+                              <span class="n">min_z_scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_z_scale</span><span class="p">,</span>
+                              <span class="n">max_num_neighbors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_num_neighbors</span><span class="p">,</span>
+                              <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Blaine Quackenbush, Paul J. Atzberger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

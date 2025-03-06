@@ -1,0 +1,554 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Python" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gnp.geometry module &mdash; Geometric Neural Operator 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=0ea5f55c"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="gnp.dataset module" href="gnp.dataset.html" />
+    <link rel="prev" title="gnp.models module" href="gnp.models.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Geometric Neural Operator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Package Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gnp.estimator.html">estimator.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnp.models.html">gnp.models module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">gnp.geometry module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-gnp.geometry.surface">gnp.geometry.surface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch"><code class="docutils literal notranslate"><span class="pre">SurfacePatch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.det_metric"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.det_metric</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.gaussian_curvature"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.gaussian_curvature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.inverse_metric"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.inverse_metric</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.inverse_metric_derivatives"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.inverse_metric_derivatives</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_first_terms"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.laplace_beltrami_first_terms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_from_coefficients"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.laplace_beltrami_from_coefficients()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_legendre_basis"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.laplace_beltrami_legendre_basis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_second_terms"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.laplace_beltrami_second_terms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.local_coordinate_basis"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.local_coordinate_basis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.mean_curvature"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.mean_curvature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.metric"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.metric</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.normals"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.normals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.normals_pca"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.normals_pca</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.pca_coordinates"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.pca_coordinates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.shape"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.shape</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.tangents"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.tangents</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.tangents_pca"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.tangents_pca</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.weingarten"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.weingarten</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.surface.SurfacePatch.xyz_coordinates"><code class="docutils literal notranslate"><span class="pre">SurfacePatch.xyz_coordinates</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gnp.geometry.legendre">gnp.geometry.legendre</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gnp.geometry.legendre.Legendre1D"><code class="docutils literal notranslate"><span class="pre">Legendre1D</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.legendre.Legendre1D.evaluate"><code class="docutils literal notranslate"><span class="pre">Legendre1D.evaluate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.legendre.Legendre1D.first_derivative"><code class="docutils literal notranslate"><span class="pre">Legendre1D.first_derivative()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.legendre.Legendre1D.second_derivative"><code class="docutils literal notranslate"><span class="pre">Legendre1D.second_derivative()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#gnp.geometry.legendre.Legendre2D"><code class="docutils literal notranslate"><span class="pre">Legendre2D</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.legendre.Legendre2D.batch_ls_best_fit"><code class="docutils literal notranslate"><span class="pre">Legendre2D.batch_ls_best_fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.legendre.Legendre2D.compute_from_coeffs"><code class="docutils literal notranslate"><span class="pre">Legendre2D.compute_from_coeffs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.legendre.Legendre2D.derivatives_from_coeffs"><code class="docutils literal notranslate"><span class="pre">Legendre2D.derivatives_from_coeffs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.legendre.Legendre2D.evaluate"><code class="docutils literal notranslate"><span class="pre">Legendre2D.evaluate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.legendre.Legendre2D.evaluate_derivatives"><code class="docutils literal notranslate"><span class="pre">Legendre2D.evaluate_derivatives()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gnp.geometry.legendre.Legendre2D.evaluate_from_coeffs"><code class="docutils literal notranslate"><span class="pre">Legendre2D.evaluate_from_coeffs()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gnp.geometry">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gnp.dataset.html">gnp.dataset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnp.utils.html">utils.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gnp.config.html">config.py</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Geometric Neural Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">gnp.geometry module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/gnp.geometry.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gnp-geometry-module">
+<h1>gnp.geometry module<a class="headerlink" href="#gnp-geometry-module" title="Link to this heading"></a></h1>
+<section id="module-gnp.geometry.surface">
+<span id="gnp-geometry-surface"></span><h2>gnp.geometry.surface<a class="headerlink" href="#module-gnp.geometry.surface" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gnp.geometry.surface.</span></span><span class="sig-name descname"><span class="pre">SurfacePatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_coefficients</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Surface Patch for computing geometric quantities from Legendre Coefficients</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.det_metric">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">det_metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.det_metric" title="Link to this definition"></a></dt>
+<dd><p>Compute the determinant of the metric tensor of the surface patches
+:returns: determinant of the metric tensor of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.gaussian_curvature">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gaussian_curvature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.gaussian_curvature" title="Link to this definition"></a></dt>
+<dd><p>Compute the Gaussian curvature tensor of the surface patches
+:returns: Gaussian curvature tensor of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.inverse_metric">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inverse_metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.inverse_metric" title="Link to this definition"></a></dt>
+<dd><p>Compute the inverse metric tensor of the surface patches
+:returns: inverse metric tensor of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.inverse_metric_derivatives">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inverse_metric_derivatives</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.inverse_metric_derivatives" title="Link to this definition"></a></dt>
+<dd><p>Compute the derivatives of the inverse metric tensor of the surface patches
+:returns: derivatives of the inverse metric tensor of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.laplace_beltrami_first_terms">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">laplace_beltrami_first_terms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_first_terms" title="Link to this definition"></a></dt>
+<dd><p>Compute the first terms of the Laplace-Beltrami operator. These terms
+are multiplied to the second derivatives of the function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The first terms of the laplace-beltrami operator.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.laplace_beltrami_from_coefficients">
+<span class="sig-name descname"><span class="pre">laplace_beltrami_from_coefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function_coefficients</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.laplace_beltrami_from_coefficients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_from_coefficients" title="Link to this definition"></a></dt>
+<dd><p>Compute the Laplace-Beltrami operator from the surface coefficients
+and the function coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>function_coefficients</strong> (<em>torch.Tensor</em>) -- Legendre coefficients representing the function.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Laplace-Beltrami operator applied to the function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.laplace_beltrami_legendre_basis">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">laplace_beltrami_legendre_basis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_legendre_basis" title="Link to this definition"></a></dt>
+<dd><p>Compute the Laplace-Beltrami operator on each of the Legendre basis
+functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(n, 16) tensor containing the Laplace-Beltrami
+operator applied to the Legendre basis functions.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.laplace_beltrami_second_terms">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">laplace_beltrami_second_terms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_second_terms" title="Link to this definition"></a></dt>
+<dd><p>Compute the second terms of the Laplace-Beltrami operator. These terms
+are multiplied to the first derivatives of the function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The second terms of the laplace-beltrami operator.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.local_coordinate_basis">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">local_coordinate_basis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.local_coordinate_basis" title="Link to this definition"></a></dt>
+<dd><p>Return the local PCA basis coordinates at each point
+:returns: local coordinates of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.mean_curvature">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mean_curvature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.mean_curvature" title="Link to this definition"></a></dt>
+<dd><p>Compute the mean curvature tensor of the surface patches
+:returns: mean curvature tensor of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.metric">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.metric" title="Link to this definition"></a></dt>
+<dd><p>Compute the metric tensor of the surface patches
+:returns: metric tensor of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.normals">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.normals" title="Link to this definition"></a></dt>
+<dd><p>Compute the normals of the surface patches in global coordinates
+:returns: normals of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.normals_pca">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normals_pca</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.normals_pca" title="Link to this definition"></a></dt>
+<dd><p>Compute the normals of the surface patches in local coordinates
+:returns: normals of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.pca_coordinates">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pca_coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.pca_coordinates" title="Link to this definition"></a></dt>
+<dd><p>Compute the PCA coordinates of the surface patches
+:returns: PCA coordinates of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.shape">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.shape" title="Link to this definition"></a></dt>
+<dd><p>Compute the shape tensor of the surface patches
+:returns: shape tensor of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.tangents">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tangents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.tangents" title="Link to this definition"></a></dt>
+<dd><p>Compute the tangents of the surface patches in global coordinates</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tangents of the surface patches</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.tangents_pca">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tangents_pca</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.tangents_pca" title="Link to this definition"></a></dt>
+<dd><p>Compute the tangents of the surface patches in local coordinates</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tangents of the surface patches</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.weingarten">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weingarten</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.weingarten" title="Link to this definition"></a></dt>
+<dd><p>Compute the Weingarten tensor of the surface patches
+:returns: Weingarten tensor of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.xyz_coordinates">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">xyz_coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.xyz_coordinates" title="Link to this definition"></a></dt>
+<dd><p>Compute the xyz coordinates of the surface patches
+:returns: xyz coordinates of the surface patches
+:rtype: torch.Tensor</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-gnp.geometry.legendre">
+<span id="gnp-geometry-legendre"></span><h2>gnp.geometry.legendre<a class="headerlink" href="#module-gnp.geometry.legendre" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre1D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gnp.geometry.legendre.</span></span><span class="sig-name descname"><span class="pre">Legendre1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre1D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre1D" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to compute the Legendre polynomials and their derivatives</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre1D.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre1D.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre1D.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the Legendre polynomials at the input points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>torch.Tensor</em>) -- Input points.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Legendre polynomials evaluated at the input points.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre1D.first_derivative">
+<span class="sig-name descname"><span class="pre">first_derivative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre1D.first_derivative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre1D.first_derivative" title="Link to this definition"></a></dt>
+<dd><p>Compute the derivative of the Legendre polynomials at the input points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>torch.Tensor</em>) -- Input points.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Derivative of Legendre polynomials evaluated at the input points.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre1D.second_derivative">
+<span class="sig-name descname"><span class="pre">second_derivative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre1D.second_derivative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre1D.second_derivative" title="Link to this definition"></a></dt>
+<dd><p>Compute the second derivative of the Legendre polynomials at the input points</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>torch.Tensor</em>) -- Input points.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Second derivative of Legendre polynomials evaluated at the input points.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre2D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gnp.geometry.legendre.</span></span><span class="sig-name descname"><span class="pre">Legendre2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre2D" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre2D.batch_ls_best_fit">
+<span class="sig-name descname"><span class="pre">batch_ls_best_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">LongTensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre2D.batch_ls_best_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre2D.batch_ls_best_fit" title="Link to this definition"></a></dt>
+<dd><p>Compute the least squares best fit of the Legendre coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>torch.Tensor</em>) -- (n, 2) tensor of input points.</p></li>
+<li><p><strong>batch</strong> (<em>Optional</em><em>[</em><em>torch.LongTensor</em><em>]</em><em>, </em><em>optional</em>) -- Batch indices. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(num_batches, (degree + 1) ** 2) tensor of Legendre coefficients.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre2D.compute_from_coeffs">
+<span class="sig-name descname"><span class="pre">compute_from_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">LongTensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre2D.compute_from_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre2D.compute_from_coeffs" title="Link to this definition"></a></dt>
+<dd><p>Compute function values using Legendre coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> (<em>torch.Tensor</em>) -- Values of the Legendre polynomials (or derivatives) at the input points.</p></li>
+<li><p><strong>coeffs</strong> (<em>torch.Tensor</em>) -- Legendre basis coefficients.</p></li>
+<li><p><strong>batch</strong> (<em>Optional</em><em>[</em><em>torch.LongTensor</em><em>]</em><em>, </em><em>optional</em>) -- Batch indices. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(n, 1) tensor of function values at the input points.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre2D.derivatives_from_coeffs">
+<span class="sig-name descname"><span class="pre">derivatives_from_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xy_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">LongTensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre2D.derivatives_from_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre2D.derivatives_from_coeffs" title="Link to this definition"></a></dt>
+<dd><p>Compute the derivatives of a function at given points from its Legendre coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xy_data</strong> (<em>torch.Tensor</em>) -- (n, 2) tensor of input points.</p></li>
+<li><p><strong>coeffs</strong> (<em>torch.Tensor</em>) -- Tensor of Legendre coefficients.</p></li>
+<li><p><strong>batch</strong> (<em>Optional</em><em>[</em><em>torch.LongTensor</em><em>]</em><em>, </em><em>optional</em>) -- Batch indices for parallel computation over many batches. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(n, 5) tensor of function derivatives at the input points.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre2D.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xy_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre2D.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre2D.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluate tensor product of Legendre polynomials at the input points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>xy_data</strong> (<em>torch.Tensor</em>) -- (n, 2) tensor of input points.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(n, (degree + 1) ** 2) tensor of Legendre polynomials evaluated at the input points.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre2D.evaluate_derivatives">
+<span class="sig-name descname"><span class="pre">evaluate_derivatives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xy_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre2D.evaluate_derivatives"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre2D.evaluate_derivatives" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the derivatives of the Legendre polynomials at the input points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>xy_data</strong> (<em>torch.Tensor</em>) -- (n, 2) tensor of input points.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Derivatives of the Legendre polynomials evaluated at the input points.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre2D.evaluate_from_coeffs">
+<span class="sig-name descname"><span class="pre">evaluate_from_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xy_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">LongTensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre2D.evaluate_from_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre2D.evaluate_from_coeffs" title="Link to this definition"></a></dt>
+<dd><p>Evaluate a function at given points from its Legendre coefficients</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xy_data</strong> (<em>torch.Tensor</em>) -- (n, 2) tensor of input points</p></li>
+<li><p><strong>coeffs</strong> (<em>torch.Tensor</em>) -- tensor of legendre coefficients</p></li>
+<li><p><strong>batch</strong> (<em>Optional</em><em>[</em><em>torch.LongTensor</em><em>]</em><em>, </em><em>optional</em>) -- batch indices for parallel
+computation over many batches. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(n, 1) tensor of function values at the input points</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-gnp.geometry">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gnp.geometry" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gnp.models.html" class="btn btn-neutral float-left" title="gnp.models module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gnp.dataset.html" class="btn btn-neutral float-right" title="gnp.dataset module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Blaine Quackenbush, Paul J. Atzberger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
