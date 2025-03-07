@@ -59,12 +59,11 @@ flow_data = estimator_clean.mean_flow(num_steps=250,
                                       smooth_x=False)
 ```
 
-
 <p align="center">
 <br>
 <img src="./mean_flows_01/images/spot_flow.png" width="100%"> 
 </p>
-----
 
 See our [example code](./mean_flows_01/mean_flow.ipynb).
 
+----
