@@ -1,5 +1,5 @@
 <p align="left">
-<img src="https://github.com/atzberg/geo_neural_op__staging/blob/main/images/docs/geo_neural_op_software.png" width="90%"> 
+<img src="https://github.com/atzberg/geo_neural_op/blob/main/images/docs/geo_neural_op_software.png" width="90%"> 
 </p>
 
 [Documentation](https://web.math.ucsb.edu/~atzberg/geo_neural_op_docs/html/index.html) |
