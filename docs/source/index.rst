@@ -24,7 +24,7 @@ components for PDE solvers, and other geometric tasks.
 
 If you find these methods or codes helpful in your project, please cite:
 
-P J Atzberger B Quackenbush. “Geometric neural operators (gnps) for data-driven deep
+B. Quackenbush, P.J. Atzberger,  “Geometric neural operators (gnps) for data-driven deep
 learning in non-euclidean settings.” In: Machine Learning: Science and Technology 5.4 (2024).
 issn: 2632-2153.  url: `<https://iopscience.iop.org/article/10.1088/2632-2153/ad8980>`_.
 
@@ -45,6 +45,6 @@ issn: 2632-2153.  url: `<https://iopscience.iop.org/article/10.1088/2632-2153/ad
 Links:
 -----------------
 * `GitHub for Codes / Examples`_
-.. _GitHub for Codes / Examples: https://github.com/atzberg
+.. _GitHub for Codes / Examples: https://github.com/atzberg/geo_neural_op
 * `Atzberger Research Group`_
 .. _Atzberger Research Group: https://atzberger.org
