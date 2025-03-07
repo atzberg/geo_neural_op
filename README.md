@@ -61,6 +61,19 @@ __Additional Information__
 
 When using this package, please cite: 
 
+```
+*Transferable Foundation Models for Geometric Tasks on Point Cloud Representations: Geometric Neural Operators,*
+B. Quackenbush and P. J. Atzberger, arXiv, (2025), 
+[ArXiv](https://arxiv.org/pdf/2503.04649).
+```
+@article{quackenbush2025geotasks,
+  title={Transferable Foundation Models for Geometric Tasks on Point Cloud Representations: Geometric Neural Operators},
+  author={Quackenbush, Blaine and Atzberger, PJ},
+  journal={arXiv:2503.04649},
+  url={https://arxiv.org/pdf/2503.04649},
+  year={2025}
+}
+```
 *Geometric Neural Operators (GNPs) for Data-Driven Deep Learning in Non-Euclidean Settings,*
 B. Quackenbush and P. J. Atzberger, Machine Learning: Science and Technology, 5.4, 045033, (2024), 
 [Paper](https://doi.org/10.1088/2632-2153/ad8980) [ArXiv](https://arxiv.org/abs/2404.10843).
@@ -76,19 +89,6 @@ B. Quackenbush and P. J. Atzberger, Machine Learning: Science and Technology, 5.
   publisher={IOP Publishing},
   year={2024}
 }
-```
-*Transferable Foundation Models for Geometric Tasks on Point Cloud Representations: Geometric Neural Operators,*
-B. Quackenbush and P. J. Atzberger, arXiv, (2025), 
-[ArXiv](https://arxiv.org/pdf/2503.04649).
-```
-@article{quackenbush2025geotasks,
-  title={Transferable Foundation Models for Geometric Tasks on Point Cloud Representations: Geometric Neural Operators},
-  author={Quackenbush, Blaine and Atzberger, PJ},
-  journal={arXiv:2503.04649},
-  url={https://arxiv.org/pdf/2503.04649},
-  year={2025}
-}
-```
 
 __Acknowledgements__
 This work was supported by grants from NSF Grant DMS-1616353 and NSF-DMS-2306345.
