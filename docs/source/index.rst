@@ -25,11 +25,11 @@ components for PDE solvers, and other geometric tasks.
 If you find these methods or codes helpful in your project, please cite:
 
 B. Quackenbush, P.J. Atzberger,  “Transferable Foundation Models for Geometric Tasks on 
-Point Cloud Representations: Geometric Neural Operators,” arXiv, (2025).
+Point Cloud Representations: Geometric Neural Operators,” arXiv, (2025),
 `<https://arxiv.org/pdf/2503.04649>`_.
 
 B. Quackenbush, P.J. Atzberger,  “Geometric neural operators (gnps) for data-driven deep
-learning in non-euclidean settings,” Machine Learning: Science and Technology, 5.4, (2024).
+learning in non-euclidean settings,” Machine Learning: Science and Technology, 5.4, (2024),
 `<https://doi.org/10.1088/2632-2153/ad8980>`_.
 
 .. toctree::
