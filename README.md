@@ -93,7 +93,7 @@ B. Quackenbush and P. J. Atzberger, Machine Learning: Science and Technology, 5.
 ```
 
 __Acknowledgements__
-This work was supported by grants from NSF Grant DMS-1616353 and NSF-DMS-2306345.
+This work was supported by NSF Grant DMS-1616353 and NSF-DMS-2306345.
 
 ----
 
