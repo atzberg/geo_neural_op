@@ -53,9 +53,9 @@ __Usage__
 
 For information on how to use the package, see
 
-- [Examples](./examples) |
+- [Examples](./examples) 
 
-- [Documentation](https://web.math.ucsb.edu/~atzberg/geo_neural_op_docs/html/index.html) |
+- [Documentation](https://web.math.ucsb.edu/~atzberg/geo_neural_op_docs/html/index.html) 
 
 __Additional Information__
 
@@ -91,7 +91,7 @@ B. Quackenbush and P. J. Atzberger, arXiv, (2025),
 ```
 
 __Acknowledgements__
-This work was supported by grants from NSF Grant DMS-1616353 and NSF Grant DMS-1616353.
+This work was supported by grants from NSF Grant DMS-1616353 and NSF-DMS-2306345.
 
 ----
 
