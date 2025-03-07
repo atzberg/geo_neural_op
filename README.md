@@ -34,7 +34,7 @@ pip install -r requirements.txt
 ```
 You may also need to first install `pip`,
 ```bash
-conda insall pip 
+conda install pip 
 ```
 
 For use of the package see the [examples folder](https://github.com/atzberg/geo_neural_op__staging/tree/main/examples).  More
