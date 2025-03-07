@@ -128,12 +128,12 @@
 <span id="gnp-geometry-surface"></span><h2>gnp.geometry.surface<a class="headerlink" href="#module-gnp.geometry.surface" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gnp.geometry.surface.</span></span><span class="sig-name descname"><span class="pre">SurfacePatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_coefficients</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gnp.geometry.surface.</span></span><span class="sig-name descname"><span class="pre">SurfacePatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_coefficients</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Surface Patch for computing geometric quantities from Legendre Coefficients</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.det_metric">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">det_metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.det_metric" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">det_metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.det_metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.det_metric" title="Link to this definition"></a></dt>
 <dd><p>Compute the determinant of the metric tensor of the surface patches
 :returns: determinant of the metric tensor of the surface patches
 :rtype: torch.Tensor</p>
@@ -141,7 +141,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.gaussian_curvature">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gaussian_curvature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.gaussian_curvature" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gaussian_curvature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.gaussian_curvature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.gaussian_curvature" title="Link to this definition"></a></dt>
 <dd><p>Compute the Gaussian curvature tensor of the surface patches
 :returns: Gaussian curvature tensor of the surface patches
 :rtype: torch.Tensor</p>
@@ -149,7 +149,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.inverse_metric">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inverse_metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.inverse_metric" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inverse_metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.inverse_metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.inverse_metric" title="Link to this definition"></a></dt>
 <dd><p>Compute the inverse metric tensor of the surface patches
 :returns: inverse metric tensor of the surface patches
 :rtype: torch.Tensor</p>
@@ -157,7 +157,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.inverse_metric_derivatives">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inverse_metric_derivatives</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.inverse_metric_derivatives" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inverse_metric_derivatives</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.inverse_metric_derivatives"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.inverse_metric_derivatives" title="Link to this definition"></a></dt>
 <dd><p>Compute the derivatives of the inverse metric tensor of the surface patches
 :returns: derivatives of the inverse metric tensor of the surface patches
 :rtype: torch.Tensor</p>
@@ -165,7 +165,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.laplace_beltrami_first_terms">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">laplace_beltrami_first_terms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_first_terms" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">laplace_beltrami_first_terms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.laplace_beltrami_first_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_first_terms" title="Link to this definition"></a></dt>
 <dd><p>Compute the first terms of the Laplace-Beltrami operator. These terms
 are multiplied to the second derivatives of the function.</p>
 <dl class="field-list simple">
@@ -198,7 +198,7 @@ and the function coefficients.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.laplace_beltrami_legendre_basis">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">laplace_beltrami_legendre_basis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_legendre_basis" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">laplace_beltrami_legendre_basis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.laplace_beltrami_legendre_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_legendre_basis" title="Link to this definition"></a></dt>
 <dd><p>Compute the Laplace-Beltrami operator on each of the Legendre basis
 functions.</p>
 <dl class="field-list simple">
@@ -214,7 +214,7 @@ operator applied to the Legendre basis functions.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.laplace_beltrami_second_terms">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">laplace_beltrami_second_terms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_second_terms" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">laplace_beltrami_second_terms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.laplace_beltrami_second_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.laplace_beltrami_second_terms" title="Link to this definition"></a></dt>
 <dd><p>Compute the second terms of the Laplace-Beltrami operator. These terms
 are multiplied to the first derivatives of the function.</p>
 <dl class="field-list simple">
@@ -229,7 +229,7 @@ are multiplied to the first derivatives of the function.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.local_coordinate_basis">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">local_coordinate_basis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.local_coordinate_basis" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">local_coordinate_basis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.local_coordinate_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.local_coordinate_basis" title="Link to this definition"></a></dt>
 <dd><p>Return the local PCA basis coordinates at each point
 :returns: local coordinates of the surface patches
 :rtype: torch.Tensor</p>
@@ -237,7 +237,7 @@ are multiplied to the first derivatives of the function.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.mean_curvature">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mean_curvature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.mean_curvature" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mean_curvature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.mean_curvature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.mean_curvature" title="Link to this definition"></a></dt>
 <dd><p>Compute the mean curvature tensor of the surface patches
 :returns: mean curvature tensor of the surface patches
 :rtype: torch.Tensor</p>
@@ -245,7 +245,7 @@ are multiplied to the first derivatives of the function.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.metric">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.metric" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.metric" title="Link to this definition"></a></dt>
 <dd><p>Compute the metric tensor of the surface patches
 :returns: metric tensor of the surface patches
 :rtype: torch.Tensor</p>
@@ -253,7 +253,7 @@ are multiplied to the first derivatives of the function.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.normals">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.normals" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.normals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.normals" title="Link to this definition"></a></dt>
 <dd><p>Compute the normals of the surface patches in global coordinates
 :returns: normals of the surface patches
 :rtype: torch.Tensor</p>
@@ -261,7 +261,7 @@ are multiplied to the first derivatives of the function.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.normals_pca">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normals_pca</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.normals_pca" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normals_pca</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.normals_pca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.normals_pca" title="Link to this definition"></a></dt>
 <dd><p>Compute the normals of the surface patches in local coordinates
 :returns: normals of the surface patches
 :rtype: torch.Tensor</p>
@@ -269,7 +269,7 @@ are multiplied to the first derivatives of the function.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.pca_coordinates">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pca_coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.pca_coordinates" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pca_coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.pca_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.pca_coordinates" title="Link to this definition"></a></dt>
 <dd><p>Compute the PCA coordinates of the surface patches
 :returns: PCA coordinates of the surface patches
 :rtype: torch.Tensor</p>
@@ -277,7 +277,7 @@ are multiplied to the first derivatives of the function.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.shape">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.shape" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.shape" title="Link to this definition"></a></dt>
 <dd><p>Compute the shape tensor of the surface patches
 :returns: shape tensor of the surface patches
 :rtype: torch.Tensor</p>
@@ -285,7 +285,7 @@ are multiplied to the first derivatives of the function.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.tangents">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tangents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.tangents" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tangents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.tangents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.tangents" title="Link to this definition"></a></dt>
 <dd><p>Compute the tangents of the surface patches in global coordinates</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -299,7 +299,7 @@ are multiplied to the first derivatives of the function.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.tangents_pca">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tangents_pca</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.tangents_pca" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tangents_pca</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.tangents_pca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.tangents_pca" title="Link to this definition"></a></dt>
 <dd><p>Compute the tangents of the surface patches in local coordinates</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -313,7 +313,7 @@ are multiplied to the first derivatives of the function.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.weingarten">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weingarten</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.weingarten" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weingarten</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.weingarten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.weingarten" title="Link to this definition"></a></dt>
 <dd><p>Compute the Weingarten tensor of the surface patches
 :returns: Weingarten tensor of the surface patches
 :rtype: torch.Tensor</p>
@@ -321,7 +321,7 @@ are multiplied to the first derivatives of the function.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="gnp.geometry.surface.SurfacePatch.xyz_coordinates">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">xyz_coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.xyz_coordinates" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">xyz_coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span></em><a class="reference internal" href="_modules/gnp/geometry/surface.html#SurfacePatch.xyz_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.surface.SurfacePatch.xyz_coordinates" title="Link to this definition"></a></dt>
 <dd><p>Compute the xyz coordinates of the surface patches
 :returns: xyz coordinates of the surface patches
 :rtype: torch.Tensor</p>
@@ -334,7 +334,7 @@ are multiplied to the first derivatives of the function.</p>
 <span id="gnp-geometry-legendre"></span><h2>gnp.geometry.legendre<a class="headerlink" href="#module-gnp.geometry.legendre" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre1D">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gnp.geometry.legendre.</span></span><span class="sig-name descname"><span class="pre">Legendre1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre1D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre1D" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gnp.geometry.legendre.</span></span><span class="sig-name descname"><span class="pre">Legendre1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre1D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre1D" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class to compute the Legendre polynomials and their derivatives</p>
 <dl class="py method">
@@ -392,7 +392,7 @@ are multiplied to the first derivatives of the function.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre2D">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gnp.geometry.legendre.</span></span><span class="sig-name descname"><span class="pre">Legendre2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre2D" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gnp.geometry.legendre.</span></span><span class="sig-name descname"><span class="pre">Legendre2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gnp/geometry/legendre.html#Legendre2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gnp.geometry.legendre.Legendre2D" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gnp.geometry.legendre.Legendre2D.batch_ls_best_fit">

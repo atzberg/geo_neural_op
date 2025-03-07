@@ -39,9 +39,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Package Reference:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">gnp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gnp.estimator.html">estimator.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gnp.models.html">gnp.models module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gnp.geometry.html">gnp.geometry module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gnp.dataset.html">gnp.dataset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gnp.utils.html">utils.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gnp.config.html">config.py</a></li>
 </ul>
 
         </div>
@@ -76,7 +81,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.dataset.patch</span><span class="w"> </span><span class="kn">import</span> <span class="n">PatchLoader</span>
 
 <div class="viewcode-block" id="load_config">
-<a class="viewcode-back" href="../../gnp.html#gnp.config.load_config">[docs]</a>
+<a class="viewcode-back" href="../../gnp.config.html#gnp.config.load_config">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_config</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load a configuration file from a yaml file.</span>
@@ -98,7 +103,7 @@
 
 
 <div class="viewcode-block" id="load_model">
-<a class="viewcode-back" href="../../gnp.html#gnp.config.load_model">[docs]</a>
+<a class="viewcode-back" href="../../gnp.config.html#gnp.config.load_model">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_model</span><span class="p">(</span><span class="n">model_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PatchGNP</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load a model from a directory.</span>
@@ -132,7 +137,7 @@
 
 
 <div class="viewcode-block" id="load_patchloader">
-<a class="viewcode-back" href="../../gnp.html#gnp.config.load_patchloader">[docs]</a>
+<a class="viewcode-back" href="../../gnp.config.html#gnp.config.load_patchloader">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_patchloader</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PatchLoader</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load a PatchLoader using a yaml file in data_dir.</span>
