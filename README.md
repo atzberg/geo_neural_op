@@ -64,13 +64,13 @@ When using this package, please cite:
 
 *Transferable Foundation Models for Geometric Tasks on Point Cloud Representations: Geometric Neural Operators,*
 B. Quackenbush and P. J. Atzberger, arXiv, (2025), 
-[arXiv](https://arxiv.org/pdf/2503.04649).
+[arXiv](https://arxiv.org/abs/2503.04649).
 ```
 @article{quackenbush2025geotasks,
   title={Transferable Foundation Models for Geometric Tasks on Point Cloud Representations: Geometric Neural Operators},
   author={Quackenbush, Blaine and Atzberger, PJ},
   journal={arXiv:2503.04649},
-  url={https://arxiv.org/pdf/2503.04649},
+  url={https://arxiv.org/abs/2503.04649},
   year={2025}
 }
 ```
