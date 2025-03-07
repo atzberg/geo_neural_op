@@ -5,7 +5,7 @@
 [Documentation](https://web.math.ucsb.edu/~atzberg/geo_neural_op_docs/html/index.html) |
 [Examples](./examples) |
 [Paper](https://doi.org/10.1088/2632-2153/ad8980) |
-[ArXiv](https://arxiv.org/abs/2404.10843)
+[arXiv](https://arxiv.org/abs/2404.10843)
                                                                                                 
 ### Geometric Neural Operators (GNPs) 
 
@@ -61,10 +61,10 @@ __Additional Information__
 
 When using this package, please cite: 
 
-```
+
 *Transferable Foundation Models for Geometric Tasks on Point Cloud Representations: Geometric Neural Operators,*
 B. Quackenbush and P. J. Atzberger, arXiv, (2025), 
-[ArXiv](https://arxiv.org/pdf/2503.04649).
+[arXiv](https://arxiv.org/pdf/2503.04649).
 ```
 @article{quackenbush2025geotasks,
   title={Transferable Foundation Models for Geometric Tasks on Point Cloud Representations: Geometric Neural Operators},
@@ -74,9 +74,10 @@ B. Quackenbush and P. J. Atzberger, arXiv, (2025),
   year={2025}
 }
 ```
+
 *Geometric Neural Operators (GNPs) for Data-Driven Deep Learning in Non-Euclidean Settings,*
 B. Quackenbush and P. J. Atzberger, Machine Learning: Science and Technology, 5.4, 045033, (2024), 
-[Paper](https://doi.org/10.1088/2632-2153/ad8980) [ArXiv](https://arxiv.org/abs/2404.10843).
+[paper](https://doi.org/10.1088/2632-2153/ad8980), [arXiv](https://arxiv.org/abs/2404.10843).
 ```
 @article{quackenbush2024gnp,
   title={Geometric neural operators (gnps) for data-driven deep learning in non-euclidean settings},
@@ -89,6 +90,7 @@ B. Quackenbush and P. J. Atzberger, Machine Learning: Science and Technology, 5.
   publisher={IOP Publishing},
   year={2024}
 }
+```
 
 __Acknowledgements__
 This work was supported by grants from NSF Grant DMS-1616353 and NSF-DMS-2306345.
