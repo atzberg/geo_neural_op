@@ -97,7 +97,7 @@ This work was supported by NSF Grant DMS-1616353 and NSF-DMS-2306345.
 
 ----
 
-[Documentation](https://web.math.ucsb.edu/~atzberg/geo_neural_op/docs/index.html) |
+[Documentation](https://web.math.ucsb.edu/~atzberg/geo_neural_op_docs/html/index.html) |
 [Examples](./examples) |
 [Paper](https://doi.org/10.1088/2632-2153/ad8980) |
 [ArXiv](https://arxiv.org/abs/2404.10843)
