@@ -59,7 +59,7 @@ For information on how to use the package, see
 
 __Additional Information__
 
-When using this package, please cite: 
+For the package, please cite: 
 
 
 *Transferable Foundation Models for Geometric Tasks on Point Cloud Representations: Geometric Neural Operators,*
