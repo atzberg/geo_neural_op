@@ -9,19 +9,24 @@
                                                                                                 
 ### Geometric Neural Operators (GNPs) 
 
-Geometric Neural Operators (GNPs) allow for data-driven deep learning
-of features from point-cloud representations and other 
-datasets for tasks involving geometry.   This includes training 
-protocols and learned operators for estimating local curvatures,
-evaluating geometric differential operators, solvers for 
-PDEs on manifolds, mean-curvature shape flows, and other tasks.
-The package provides practical neural network architectures and factorizations 
-for training to accounting for geometric contributions and features.  The package also 
-has a modular design allowing for use of GNPs within other data-processing pipelines.
-Pretrained models are also provided for estimating curvatures, Laplace-Beltrami operators,
-components for PDE solvers, and other geometric tasks.
+Geometric Neural Operators (GNPs) allow for data-driven deep learning of
+features from point-cloud representations and other datasets for tasks
+involving geometry.   This includes training protocols and learned operators
+for estimating local curvatures, evaluating geometric differential operators,
+solvers for PDEs on manifolds, mean-curvature shape flows, and other tasks.
+The package provides practical neural network architectures and factorizations
+for training to accounting for geometric contributions and features.  The
+package also has a modular design allowing for use of GNPs within other
+data-processing pipelines.  Pretrained models are also provided for estimating
+curvatures, Laplace-Beltrami operators, components for PDE solvers, and other
+geometric tasks.
 
-Examples are included that demonstrate how GNPs can be used.  This includes (i) to estimate geometric properties, such as the metric and curvatures of surfaces, (ii) to approximate solutions of geometric partial differential equations (PDEs) on manifolds, and (iii) to perform curvature-driven flows of shapes. These results show a few ways GNPs can be used for incorporating the roles of geometry into machine learning processing pipelines and solvers.
+Examples are included that demonstrate how GNPs can be used.  This includes (i)
+to estimate geometric properties, such as the metric and curvatures of
+surfaces, (ii) to approximate solutions of geometric partial differential
+equations (PDEs) on manifolds, and (iii) to perform curvature-driven flows of
+shapes. These results show a few ways GNPs can be used for incorporating the
+roles of geometry into machine learning processing pipelines and solvers.
 
 __Quick Start__
 
@@ -37,8 +42,8 @@ You may also need to first install `pip`,
 conda install pip 
 ```
 
-For use of the package see the [examples folder](https://github.com/atzberg/geo_neural_op__staging/tree/main/examples).  More
-information on the structure of the package also can be found on the
+For use of the package see the [examples folder](https://github.com/atzberg/geo_neural_op__staging/tree/main/examples).  
+More information on the structure of the package also can be found on the
 [documentation pages](https://web.math.ucsb.edu/~atzberg/geo_neural_op_docs/html/index.html).
 
 __Packages__ 
@@ -66,7 +71,7 @@ For the package, please cite:
 B. Quackenbush and P. J. Atzberger, arXiv, (2025), 
 [arXiv](https://arxiv.org/abs/2503.04649).
 ```
-@article{quackenbush2025geotasks,
+@article{quackenbush_atzberger_gnp_transfer_2025,
   title={Transferable Foundation Models for Geometric Tasks on Point Cloud Representations: Geometric Neural Operators},
   author={Quackenbush, Blaine and Atzberger, PJ},
   journal={arXiv:2503.04649},
@@ -79,7 +84,7 @@ B. Quackenbush and P. J. Atzberger, arXiv, (2025),
 B. Quackenbush and P. J. Atzberger, Machine Learning: Science and Technology, 5.4, 045033, (2024), 
 [paper](https://doi.org/10.1088/2632-2153/ad8980), [arXiv](https://arxiv.org/abs/2404.10843).
 ```
-@article{quackenbush2024gnp,
+@article{quackenbush_atzberger_gnps_2024,
   title={Geometric neural operators (gnps) for data-driven deep learning in non-euclidean settings},
   author={Quackenbush, Blaine and Atzberger, PJ},
   journal={Machine Learning: Science and Technology},
