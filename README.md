@@ -13,19 +13,19 @@
 GNPs enable deep learning of features from point clouds and geometric datasets. 
 Provides data-driven tools for learning and evaluating differential operators and solving PDEs on manifolds.
 
-#### 🚀 Core Functionality
+#### 🟣 Core Functionality
 
 - **Geometric Feature Learning:** Extract intrinsic properties directly from point-cloud representations.
 - **Differential Operators:** Evaluate local curvatures and Laplace-Beltrami operators using learned protocols.
 - **Advanced PDE Solvers:** Robust solvers for Partial Differential Equations (PDEs) on manifolds.
 - **Transferable Pretrained Models:** Available models for immediate use with pretrained weights, see examples section.
 
-#### 🌐️ Additional Functionality
+#### 🔵 Additional Functionality
 - **Shape Evolution:** Support for mean-curvature shape flows and other dynamic geometric tasks.
 - **Efficient Architectures:** Implementations using sparsity and factorizations for efficiency and trade-offs.
 - **Modular Architecture:** Easily integrate GNP components into larger data-processing pipelines.
 
-#### 🛠️ Robust Estimation Approach 
+#### Robust Estimation Approach 
 
 Our pre-trained GNP models and training methods also allow for 
 coping with noise and other artifacts that arise when processing point-clouds.
