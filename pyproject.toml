@@ -35,7 +35,18 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["gnp","gnp/models","gnp/geometry","gnp/dataset","gnp/model_weights"]
+include = ["gnp*"]
+
+[tool.setuptools.package-data]
+"gnp" = ["model_weights/clean_30k/*.yaml",
+         "model_weights/clean_30k/*.pth",
+         "model_weights/clean_50k/*.yaml",
+         "model_weights/clean_50k/*.pth",
+         "model_weights/noise_70k/*.yaml",
+         "model_weights/noise_70k/*.pth",
+         "model_weights/outlier_50k/*.yaml",
+         "model_weights/outlier_50k/*.pth"]
+
 
 [build-system]
 requires = ["setuptools>=61.0"]
