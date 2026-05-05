@@ -3,14 +3,14 @@ name = "gnp"
 version = "2.0.0"
 requires-python = ">=3.10"
 dependencies = [
-    "numpy~=2.4.0",
-    "PyYAML~=6.0.3",
-    "scipy~=1.16.3",
-    "torch~=2.6.0",
-    "torch_geometric~=2.7.0",
-    "torch_scatter~=2.1.2",
-    "torch_cluster~=1.6.3",
-    "tqdm~=4.67.1"
+    "numpy>=2.4.0",
+    "PyYAML>=6.0.3",
+    "scipy>=1.16.3",
+    "torch>=2.6.0",
+    "torch_geometric>=2.7.0",
+    "torch_scatter>=2.1.2",
+    "torch_cluster>=1.6.3",
+    "tqdm>=4.67.1"
 ]
 description = "Geometric Neural Operators"
 readme = "README.md"
@@ -35,7 +35,7 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["gnp"]
+include = ["gnp","gnp/models","gnp/geometry","gnp/dataset","gnp/model_weights"]
 
 [build-system]
 requires = ["setuptools>=61.0"]
