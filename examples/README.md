@@ -1,4 +1,10 @@
 ### Examples
+
+<p align="left">
+<br>
+<img src="./mean_flows_01/images/mean_curv_flow_01.gif" width="80%"> 
+</p>
+
 ----
 GNP models can be instantiated using the ``GNP`` model class:
 ```python
