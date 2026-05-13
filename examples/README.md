@@ -1,4 +1,4 @@
-### Examples
+# Examples
 
 <p align="left">
 <br>
@@ -39,7 +39,7 @@ estimator = GeometryEstimator(pcd=pcd,
 ```
 
 
-#### GNPs for Estimating Curvatures 
+## GNPs for Estimating Curvatures 
 Geometric quantities can be easily generated using
 ```python
 outputs = estimator.estimate_quantities(['mean_curvature', 'gaussian_curvature'])
@@ -72,7 +72,7 @@ We use Scipy's LGMRES and PyAMG for preconditioning. See our collocation
 [example code](./collocation_01/collocation.ipynb)
 
 ----
-#### GNPs for Curvature Driven Flows
+## GNPs for Curvature Driven Flows
 
 Mean curvature flows (MCF) can be simulated using 
 ```python
@@ -94,7 +94,7 @@ flow_data = estimator.mean_flow(
 See our [example code](./mean_flows_01/mean_flow.ipynb).
 
 ----
-#### GNP Curvature Estimation: Training Example
+## GNP Curvature Estimation: Training Example
 
 We show a standalone example of how to train a **Geometric Neural
 Operator (PatchGNP)** from scratch to estimate surface curvatures on 3D point clouds.
