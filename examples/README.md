@@ -54,7 +54,7 @@ outputs = estimator.estimate_quantities(['mean_curvature', 'gaussian_curvature']
 See our [example code](./curvatures_01/curvatures.ipynb).
 
 ----
-#### GNPs for Solving PDEs on Manifolds 
+## GNPs for Solving PDEs on Manifolds 
 A stiffness matrix for the Laplace-Beltrami equation $-\Delta_{\text{LB}} u = f$
 using Generalized Moving Least Squares (GMLS) can be constructed
 ```python
