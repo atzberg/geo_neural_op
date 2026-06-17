@@ -64,12 +64,12 @@ stiffness_matrix, collocation_mask, outlier_mask = estimator.stiffness_matrix_gm
 ```
 <p align="center">
 <br>
-<img src="./collocation_01/images/spot_collocation.png" width="100%"> 
+<img src="./pde_solver_01/images/spot_collocation.png" width="100%"> 
 </p>
 
 This can be paired with your favorite linear solvers and/or preconditioners. 
 We use Scipy's LGMRES and PyAMG for preconditioning. See our collocation 
-[example code](./collocation_01/collocation.ipynb)
+[example code](./pde_solver_01/pde_solver_collocation_01.ipynb)
 
 ----
 ## GNPs for Curvature Driven Flows
