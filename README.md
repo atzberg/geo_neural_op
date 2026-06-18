@@ -42,6 +42,12 @@ point-clouds have artifacts, such as outliers as shown below.
 <img src="./examples/mean_flows_01/images/mean_curv_flow_01.gif" width="60%"> <br>
 </p>
 
+A few applications of GNPs include
+- [[mean curvature flows]](https://github.com/atzberg/geo_neural_op/tree/main/examples/mean_flows_01)
+- [[pde solvers]](https://github.com/atzberg/geo_neural_op/tree/main/examples/pde_solver_01)
+- [[curvature estimation]](https://github.com/atzberg/geo_neural_op/tree/main/examples/curvature_01)
+- [[transferable models]](https://github.com/atzberg/geo_neural_op/tree/main/examples/models_01)
+
 [[examples folder]](https://github.com/atzberg/geo_neural_op/tree/main/examples)
 
 We provide practical demonstrations for how GNPs can be used in
@@ -50,11 +56,7 @@ the metric and curvatures of surfaces, (ii) to approximate solutions of
 geometric partial differential equations (PDEs) on manifolds, and (iii) to
 perform curvature-driven flows of shapes. These results show a few ways GNPs
 can be used for incorporating the roles of geometry into machine learning
-processing pipelines and solvers. See the [examples](https://github.com/atzberg/geo_neural_op/tree/main/examples).  
-
-
-
-
+processing pipelines and solvers. See the [examples folder](https://github.com/atzberg/geo_neural_op/tree/main/examples).  
 
 #### 📦 __Installation__
 
