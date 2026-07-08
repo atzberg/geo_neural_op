@@ -1,4 +1,4 @@
-# Curvature Estimation 
+# Solving PDEs on Manifolds
 
 <p align="left">
 <br>
