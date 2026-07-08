@@ -2,7 +2,7 @@
 
 <p align="left">
 <br>
-<img src="./examples/curvatures_01/images/curvature_estimates_02.png" width="60%"> <br>
+<img src="./images/curvature_estimates_02.png" width="60%"> <br>
 </p>
 
 
