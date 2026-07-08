@@ -45,7 +45,7 @@ point-clouds have artifacts, such as outliers as shown below.
 A few applications of GNPs include
 - [[mean curvature flows]](https://github.com/atzberg/geo_neural_op/tree/main/examples/mean_flows_01)
 - [[pde solvers]](https://github.com/atzberg/geo_neural_op/tree/main/examples/pde_solver_01)
-- [[curvature estimation]](https://github.com/atzberg/geo_neural_op/tree/main/examples/curvature_01)
+- [[curvature estimation]](https://github.com/atzberg/geo_neural_op/tree/main/examples/curvatures_01)
 - [[transferable models]](https://github.com/atzberg/geo_neural_op/tree/main/examples/models_01)
 
 [[examples folder]](https://github.com/atzberg/geo_neural_op/tree/main/examples)
